@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mallorca">
+<meta name="theme-color" content="#C97B63">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23F4B58A'/%3E%3Cstop offset='1' stop-color='%23C97B63'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='url(%23g)'/%3E%3Ctext x='90' y='118' text-anchor='middle' font-family='Georgia,serif' font-style='italic' font-size='72' fill='%23fff'%3EM%3C/text%3E%3C/svg%3E">
+<title>Mallorca · Dein Fotobuch</title>
+<style>
+:root{
+  --bg:#FBF4ED; --surface:#fff; --ink:#2A1A2E; --ink-soft:#7A6973;
+  --rose:#C97B63; --rose-soft:#F1D5C8; --rose-deep:#A35846; --gold:#D4A574;
+  --shadow:0 4px 18px rgba(42,26,46,.07); --shadow-lg:0 12px 40px rgba(42,26,46,.14);
+  --r:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overscroll-behavior-y:contain}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.5;font-size:16px;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.serif{font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;font-style:italic;font-weight:400}
+button{font-family:inherit}
+input,textarea,select{font-family:inherit}
+
+.app{max-width:480px;margin:0 auto;min-height:100vh;position:relative;padding-bottom:88px;background:var(--bg)}
+.page{padding:0 20px 24px;display:none;animation:fade .25s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ============ SPLASH ============ */
+.splash{position:fixed;inset:0;z-index:500;background:linear-gradient(160deg,#F4B58A 0%,#E89372 28%,#C97B63 55%,#7E4858 80%,#3E2238 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;color:#fff;animation:splashIn .4s ease}
+.splash.hide{display:none}
+@keyframes splashIn{from{opacity:0}to{opacity:1}}
+.splash::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 85% 18%,rgba(255,220,180,.5),transparent 45%),
+             radial-gradient(circle at 12% 92%,rgba(40,15,40,.5),transparent 55%);
+  pointer-events:none}
+.splash-inner{position:relative;z-index:1;text-align:center;width:100%;max-width:380px;display:flex;flex-direction:column;align-items:center;gap:28px}
+.splash-q h1{font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-weight:400;font-size:54px;line-height:1.1;margin-bottom:14px}
+.splash-q p{font-size:14px;opacity:.85;letter-spacing:.5px}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;width:100%}
+.lvl{width:100%;aspect-ratio:1;border-radius:50%;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;
+  font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-size:20px;cursor:pointer;transition:all .15s;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.lvl:active{transform:scale(.92)}
+.lvl.on{background:#fff;color:var(--rose-deep);border-color:#fff;transform:scale(1.05);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.scale-legend{display:flex;justify-content:space-between;width:100%;font-size:11px;opacity:.75;margin-top:-12px;letter-spacing:.3px}
+.splash-actions{display:flex;flex-direction:column;gap:14px;width:100%;margin-top:8px}
+.btn-light{background:#fff;color:var(--rose-deep);border:none;padding:16px;border-radius:14px;font-weight:700;font-size:15px;cursor:pointer;letter-spacing:.3px;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.btn-light:disabled{opacity:.35;box-shadow:none;cursor:not-allowed}
+.btn-light:active:not(:disabled){transform:scale(.97)}
+.btn-ghost{background:rgba(255,255,255,.14);color:#fff;border:1.5px solid rgba(255,255,255,.35);padding:14px;border-radius:14px;font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;backdrop-filter:blur(6px)}
+
+/* ============ INSTRUCTIONS ============ */
+.inst{position:fixed;inset:0;z-index:600;background:rgba(40,20,40,.92);display:none;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.inst.open{display:flex;animation:fade .25s}
+.inst-card{background:var(--bg);border-radius:24px;padding:28px 24px;max-width:380px;width:100%;box-shadow:var(--shadow-lg)}
+.inst-card h2{font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-size:26px;margin-bottom:6px}
+.inst-card .sub{color:var(--ink-soft);font-size:14px;margin-bottom:22px}
+.step{display:flex;align-items:flex-start;gap:14px;padding:12px 0;border-bottom:1px solid rgba(42,26,46,.07)}
+.step:last-of-type{border-bottom:none}
+.step-n{width:30px;height:30px;border-radius:50%;background:var(--rose);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+.step-t{font-size:14px;line-height:1.4;padding-top:4px}
+.step-t b{color:var(--ink)}
+.share-svg{display:inline-block;vertical-align:middle;margin:0 2px}
+.inst-close{width:100%;padding:14px;background:var(--rose);color:#fff;border:none;border-radius:14px;font-weight:700;font-size:15px;cursor:pointer;margin-top:16px}
+
+/* ============ HERO ============ */
+.hero{
+  margin:0 -20px 20px;height:440px;position:relative;overflow:hidden;color:#fff;
+  background:linear-gradient(160deg,#F4B58A 0%,#E89372 28%,#C97B63 55%,#7E4858 80%,#3E2238 100%);
+  border-radius:0 0 32px 32px;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:32px 24px calc(40px + env(safe-area-inset-top)) 24px;
+  box-shadow:var(--shadow-lg);
+}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;animation:heroFade 1s ease}
+@keyframes heroFade{from{opacity:0;transform:scale(1.05)}to{opacity:1;transform:none}}
+.hero::before{content:'';position:absolute;inset:0;z-index:1;
+  background:linear-gradient(to bottom,rgba(20,10,20,.12) 0%,rgba(20,10,20,.25) 45%,rgba(40,15,30,.7) 82%,rgba(50,20,35,.88) 100%);
+  pointer-events:none}
+.hero::after{content:'';position:absolute;inset:0;z-index:1;
+  background:radial-gradient(circle at 82% 14%,rgba(255,220,180,.22),transparent 42%);
+  pointer-events:none}
+.hero-content{position:relative;z-index:2}
+.eyebrow{font-size:11px;letter-spacing:4px;text-transform:uppercase;opacity:.9;margin-bottom:14px;font-weight:600}
+.hero h1{font-size:60px;line-height:1;margin-bottom:18px}
+.hero-dates{font-size:14px;opacity:.92;font-weight:500;letter-spacing:.5px}
+.hero-fab{position:absolute;width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.22);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;top:calc(20px + env(safe-area-inset-top));right:18px}
+.fab-letter svg{transition:transform .3s}
+.fab-letter:active svg{transform:scale(1.3)}
+
+/* ============ CARDS ============ */
+.card{background:var(--surface);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+.card-label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px;font-weight:600}
+.cd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.cd-cell{text-align:center}
+.cd-num{font-family:"Iowan Old Style",Georgia,serif;font-size:30px;color:var(--rose);line-height:1}
+.cd-unit{font-size:10px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.8px;margin-top:4px}
+
+.day-pill{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 11px;border-radius:20px;margin-bottom:10px}
+.live-title{font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-size:30px;line-height:1.1;margin-bottom:6px}
+.live-sub{font-size:14px;color:var(--ink-soft);margin-bottom:14px}
+
+.prompt-card{background:linear-gradient(135deg,#FDE8DC 0%,#F4D2BE 100%);color:var(--ink);padding:20px;border-radius:var(--r);margin-bottom:14px;box-shadow:var(--shadow)}
+.prompt-card .ph{font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-size:21px;line-height:1.25;margin-bottom:12px}
+.prompt-card button{background:var(--rose-deep);color:#fff;border:none;padding:11px 18px;border-radius:12px;font-weight:600;font-size:14px;cursor:pointer}
+
+.nerv-card{background:var(--surface);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);margin-bottom:14px;display:flex;align-items:center;gap:14px}
+.nerv-emoji{font-size:34px}
+.nerv-text{flex:1}
+.nerv-num{font-family:"Iowan Old Style",Georgia,serif;font-size:28px;color:var(--rose);line-height:1}
+.nerv-lbl{font-size:12px;color:var(--ink-soft);letter-spacing:.5px;text-transform:uppercase;margin-top:2px;font-weight:600}
+
+.ch-teaser{background:var(--surface);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);margin-bottom:14px;cursor:pointer;display:flex;align-items:center;gap:14px}
+.ch-teaser:active{transform:scale(.99)}
+.ch-teaser-icon{width:46px;height:46px;border-radius:14px;background:var(--rose-soft);color:var(--rose-deep);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.ch-teaser-text{flex:1}
+.ch-teaser-t{font-weight:600;font-size:15px}
+.ch-teaser-s{font-size:12px;color:var(--ink-soft);margin-top:2px}
+.ch-teaser-arrow{color:var(--rose);font-size:20px}
+
+.recap-card{text-align:center;padding:24px}
+.recap-card h2{font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-size:30px;margin-bottom:6px}
+.recap-card p{color:var(--ink-soft);font-size:14px;margin-bottom:18px}
+.recap-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px}
+.rs-num{font-family:"Iowan Old Style",Georgia,serif;font-size:30px;color:var(--rose);line-height:1}
+.rs-lbl{font-size:10.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.8px;margin-top:4px}
+
+.install-hint{background:transparent;border:1.5px dashed var(--rose-soft);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer}
+.install-hint:active{background:rgba(241,213,200,.3)}
+.install-hint-t{flex:1;font-size:13px;color:var(--ink)}
+.install-hint-x{background:none;border:none;color:var(--ink-soft);font-size:18px;padding:4px 8px;cursor:pointer}
+
+.section-title{font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-size:26px;margin:8px 0 14px;color:var(--ink)}
+.section-sub{font-size:13px;color:var(--ink-soft);margin-bottom:18px;margin-top:-10px}
+
+/* ============ TAGEBUCH ============ */
+.add-entry-btn{width:100%;padding:14px;background:var(--rose);color:#fff;border:none;border-radius:14px;font-weight:600;font-size:14px;cursor:pointer;margin-bottom:18px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:var(--shadow)}
+.add-entry-btn:active{transform:scale(.98)}
+.entry{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden;position:relative}
+.entry-img{width:100%;display:block;background:#EDE3DA}
+.entry-img img{width:100%;display:block;object-fit:cover;max-height:480px}
+.entry-body{padding:14px 16px 16px}
+.entry-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px}
+.entry-time{font-size:11px;color:var(--ink-soft);letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+.entry-actions{display:flex;gap:2px}
+.entry-action{background:none;border:none;color:#C4B5BD;cursor:pointer;padding:6px 8px;font-size:14px;border-radius:8px}
+.entry-action:active{background:rgba(0,0,0,.05)}
+.entry-action.danger:active{color:#C04848}
+.entry-badge{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-bottom:8px}
+.entry-text{font-size:15px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.entry-loc{margin-top:10px;font-size:13px;color:var(--rose);display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.entry-loc:active{opacity:.6}
+.empty{text-align:center;padding:50px 20px;color:var(--ink-soft);background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow)}
+.empty-icon{font-size:36px;margin-bottom:10px;opacity:.4}
+
+/* ============ CHALLENGES ============ */
+.ch-card{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;margin-bottom:18px}
+.ch-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(42,26,46,.05);cursor:pointer;transition:background .15s}
+.ch-item:last-of-type{border-bottom:none}
+.ch-item:active{background:#FAF1E8}
+.ch-check{width:24px;height:24px;border-radius:50%;border:2px solid var(--rose-soft);flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#fff;transition:all .2s}
+.ch-item.done .ch-check{background:var(--rose);border-color:var(--rose)}
+.ch-item.done .ch-check::after{content:'✓';color:#fff;font-size:14px;font-weight:700}
+.ch-text{flex:1;font-size:14.5px;line-height:1.3}
+.ch-item.done .ch-text{text-decoration:line-through;color:var(--ink-soft)}
+.ch-thumb{width:38px;height:38px;border-radius:8px;background:#EDE3DA;overflow:hidden;flex-shrink:0}
+.ch-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.ch-del{background:none;border:none;color:#C4B5BD;cursor:pointer;padding:4px;font-size:14px}
+.ch-add{display:flex;gap:8px;padding:12px 16px;background:#FAF1E8}
+.ch-add input{flex:1;border:none;background:#fff;padding:10px 14px;border-radius:10px;font-size:14px;outline:none}
+.ch-add button{background:var(--rose);color:#fff;border:none;width:42px;height:42px;border-radius:10px;font-size:20px;font-weight:300;cursor:pointer}
+.ch-progress{background:var(--surface);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow);margin-bottom:14px}
+.ch-progress-meta{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.ch-progress-num{font-family:"Iowan Old Style",Georgia,serif;font-size:24px;color:var(--rose);line-height:1}
+.ch-progress-lbl{font-size:11px;color:var(--ink-soft);letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+.ch-bar{height:6px;background:#F1E5DC;border-radius:3px;overflow:hidden}
+.ch-bar-fill{height:100%;background:linear-gradient(90deg,var(--rose-soft),var(--rose));transition:width .4s ease}
+
+/* ============ NAV ============ */
+.tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid rgba(42,26,46,.07);display:flex;
+  padding:8px 0 calc(10px + env(safe-area-inset-bottom));z-index:100}
+.tab{flex:1;border:none;background:transparent;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;color:#9B8990;font-size:10.5px;font-weight:600;cursor:pointer;transition:color .2s;letter-spacing:.3px}
+.tab svg{width:23px;height:23px}
+.tab.active{color:var(--rose)}
+
+/* ============ MODALS ============ */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}
+.modal img{max-width:100%;max-height:85vh;border-radius:12px;display:block}
+.modal-x{position:absolute;top:calc(16px + env(safe-area-inset-top));right:16px;color:#fff;background:rgba(255,255,255,.18);border:none;width:42px;height:42px;border-radius:50%;font-size:22px;cursor:pointer}
+
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:none;align-items:flex-end;animation:fade .2s ease}
+.sheet-bg.open{display:flex}
+.sheet{background:var(--bg);width:100%;max-width:480px;margin:0 auto;border-radius:24px 24px 0 0;padding:24px 22px calc(24px + env(safe-area-inset-bottom));max-height:90vh;overflow-y:auto;animation:slideUp .3s ease}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
+.sheet h2{font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-size:24px;margin-bottom:6px}
+.sheet .sheet-sub{font-size:13px;color:var(--ink-soft);margin-bottom:18px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11px;color:var(--ink-soft);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;font-weight:600}
+.field input,.field textarea,.field select{width:100%;padding:12px 14px;border:1.5px solid rgba(42,26,46,.1);border-radius:12px;font-size:15px;background:#fff;color:var(--ink);outline:none;font-family:inherit}
+.field textarea{resize:vertical;min-height:80px}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--rose)}
+.btn-row{display:flex;gap:10px;margin-top:18px}
+.btn-row button{flex:1;padding:14px;border:none;border-radius:12px;font-weight:600;font-size:14px;cursor:pointer}
+.btn-ok{background:var(--rose);color:#fff}
+.btn-cancel{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+.btn-delete{background:#fff;color:#C04848;box-shadow:var(--shadow)}
+.photo-pick{display:flex;gap:10px;margin-top:6px}
+.photo-pick label{flex:1;padding:11px;background:#fff;border:1.5px solid rgba(42,26,46,.1);border-radius:12px;text-align:center;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;color:var(--ink)}
+.photo-pick label:active{background:var(--rose-soft)}
+.photo-preview{margin-top:12px;position:relative;border-radius:12px;overflow:hidden;background:#EDE3DA;display:none}
+.photo-preview.show{display:block}
+.photo-preview img{width:100%;display:block;max-height:240px;object-fit:cover}
+.photo-preview .x{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.6);color:#fff;border:none;width:30px;height:30px;border-radius:50%;font-size:18px;cursor:pointer}
+.save-phone-btn{width:100%;padding:11px;margin-top:10px;background:#fff;color:var(--rose-deep);border:1.5px solid var(--rose-soft);border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.save-phone-btn:active{background:var(--rose-soft)}
+.ch-banner{background:var(--rose-soft);color:var(--rose-deep);padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+
+/* ============ LETTER ============ */
+.letter{position:fixed;inset:0;z-index:400;background:linear-gradient(170deg,#FBF4ED 0%,#F4D2BE 100%);display:none;flex-direction:column;animation:fade .3s}
+.letter.open{display:flex}
+.letter-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px calc(16px + env(safe-area-inset-top)) 20px}
+.letter-head button{background:rgba(42,26,46,.08);border:none;width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;color:var(--ink);display:flex;align-items:center;justify-content:center}
+.letter-body{flex:1;overflow-y:auto;padding:20px 28px 40px;display:flex;flex-direction:column;justify-content:center}
+.letter-title{text-align:center;font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-size:34px;line-height:1.15;color:var(--ink);margin-bottom:32px}
+.letter-text{font-family:"Iowan Old Style",Georgia,serif;font-size:17px;line-height:1.7;color:var(--ink);white-space:pre-wrap;text-align:left}
+
+.banner{background:#FFF4E0;color:#7A5A1F;padding:11px 14px;border-radius:12px;font-size:12.5px;margin-bottom:14px;line-height:1.4}
+</style>
+</head>
+<body>
+
+<!-- ============ SPLASH ============ -->
+<div id="splash" class="splash">
+  <div class="splash-inner">
+    <div class="splash-q">
+      <h1>Nervös? <span style="font-style:normal">😂</span></h1>
+      <p>Tipp deine Vorfreude</p>
+    </div>
+    <div class="scale" id="scale">
+      <button class="lvl" data-l="1">1</button>
+      <button class="lvl" data-l="2">2</button>
+      <button class="lvl" data-l="3">3</button>
+      <button class="lvl" data-l="4">4</button>
+      <button class="lvl" data-l="5">5</button>
+      <button class="lvl" data-l="6">6</button>
+      <button class="lvl" data-l="7">7</button>
+      <button class="lvl" data-l="8">8</button>
+      <button class="lvl" data-l="9">9</button>
+      <button class="lvl" data-l="10">10</button>
+    </div>
+    <div class="scale-legend">
+      <span>1 — gar nicht</span><span>10 — ich dreh durch</span>
+    </div>
+    <div class="splash-actions">
+      <button id="splash-next" class="btn-light" disabled>Weiter</button>
+      <button id="splash-home" class="btn-ghost">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+        Zum Home-Bildschirm hinzufügen
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ HOMESCREEN INSTRUCTIONS ============ -->
+<div id="inst" class="inst">
+  <div class="inst-card">
+    <h2>Auf den Home-Bildschirm</h2>
+    <p class="sub">So bleibt die App immer einen Tap entfernt:</p>
+    <div class="step">
+      <div class="step-n">1</div>
+      <div class="step-t">Diese Seite in <b>Safari</b> öffnen (nicht in einem anderen Browser).</div>
+    </div>
+    <div class="step">
+      <div class="step-n">2</div>
+      <div class="step-t">Tippe unten auf das Teilen-Symbol
+        <svg class="share-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C97B63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">3</div>
+      <div class="step-t">Scroll runter zu <b>„Zum Home-Bildschirm"</b>.</div>
+    </div>
+    <div class="step">
+      <div class="step-n">4</div>
+      <div class="step-t">Bestätige mit <b>„Hinzufügen"</b>.</div>
+    </div>
+    <button class="inst-close" id="inst-close">Verstanden</button>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div class="app">
+
+  <!-- START -->
+  <section id="p-start" class="page active">
+    <div class="hero">
+      <img class="hero-bg" src="https://images.unsplash.com/photo-1534917911-e787327fa568?w=1600&q=80&auto=format&fit=crop" alt="Mallorca" onerror="this.style.display='none'">
+      <button class="hero-fab fab-letter" id="open-letter" aria-label="Brief öffnen">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+      </button>
+      <div class="hero-content">
+        <div class="eyebrow">Dein Fotobuch</div>
+        <h1 class="serif">Mallorca</h1>
+        <div class="hero-dates">04. — 08. Juni 2026</div>
+      </div>
+    </div>
+
+    <div id="banner" class="banner" style="display:none"></div>
+    <div id="install-hint" class="install-hint" style="display:none">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C97B63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+      <div class="install-hint-t">App auf den Home-Bildschirm? <span style="color:var(--rose);font-weight:600">So geht's →</span></div>
+      <button class="install-hint-x" id="install-hint-x" aria-label="Ausblenden">×</button>
+    </div>
+
+    <div id="start-body"></div>
+  </section>
+
+  <!-- TAGEBUCH -->
+  <section id="p-diary" class="page">
+    <h1 class="section-title">Unser Tagebuch</h1>
+    <div class="section-sub">Foto, Gedanke, Ort — alles, was bleiben soll.</div>
+    <button class="add-entry-btn" id="add-entry">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Eintrag hinzufügen
+    </button>
+    <div id="diary-list"></div>
+  </section>
+
+  <!-- CHALLENGES -->
+  <section id="p-ch" class="page">
+    <h1 class="section-title">Foto-Challenges</h1>
+    <div class="section-sub">Tipp auf eine Challenge → Foto machen → fertig. Landet automatisch im Tagebuch.</div>
+    <div id="ch-progress-wrap"></div>
+    <div class="ch-card">
+      <div id="ch-list"></div>
+      <div class="ch-add">
+        <input id="ch-input" type="text" placeholder="Eigene Challenge" maxlength="80">
+        <button id="ch-add-btn" aria-label="Hinzufügen">+</button>
+      </div>
+    </div>
+  </section>
+
+  <nav class="tabs">
+    <button class="tab active" data-p="start">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12L12 4l9 8"/><path d="M5 10v9a1 1 0 001 1h3v-6h6v6h3a1 1 0 001-1v-9"/></svg>
+      Start
+    </button>
+    <button class="tab" data-p="diary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+      Tagebuch
+    </button>
+    <button class="tab" data-p="ch">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      Challenge
+    </button>
+  </nav>
+</div>
+
+<!-- PHOTO VIEWER -->
+<div id="photo-modal" class="modal">
+  <button class="modal-x" id="pm-close">×</button>
+  <img id="pm-img" alt="">
+</div>
+
+<!-- ENTRY ADD/EDIT -->
+<div id="entry-sheet" class="sheet-bg">
+  <div class="sheet">
+    <h2 id="en-h">Neuer Eintrag</h2>
+    <div class="sheet-sub">Foto, Text, Ort — was du willst, oder alles.</div>
+    <div id="en-ch-banner" class="ch-banner" style="display:none">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+      <span id="en-ch-banner-text">Challenge</span>
+    </div>
+    <div class="field">
+      <label>Foto</label>
+      <div class="photo-pick">
+        <label>📷 Kamera <input type="file" accept="image/*" capture="environment" id="en-cam" style="display:none"></label>
+        <label>🖼 Galerie <input type="file" accept="image/*" id="en-gal" style="display:none"></label>
+      </div>
+      <div class="photo-preview" id="en-prev">
+        <img id="en-prev-img" alt="">
+        <button class="x" id="en-prev-x" aria-label="Foto entfernen">×</button>
+      </div>
+      <button id="en-save-phone" class="save-phone-btn" style="display:none">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Foto im Handy sichern
+      </button>
+    </div>
+    <div class="field"><label>Was bleibt?</label><textarea id="en-text" placeholder="Gedanke, Moment, Lacher…"></textarea></div>
+    <div class="field"><label>Ort</label><input id="en-loc" type="text" placeholder="z.B. Mad Donkey Cafe"></div>
+    <div class="btn-row">
+      <button class="btn-cancel" data-close="entry-sheet">Abbrechen</button>
+      <button class="btn-ok" id="en-save">Festhalten</button>
+    </div>
+    <div class="btn-row" id="en-del-row" style="display:none"><button class="btn-delete" id="en-del">Eintrag löschen</button></div>
+  </div>
+</div>
+
+<!-- LETTER -->
+<div id="letter" class="letter">
+  <div class="letter-head">
+    <button id="letter-close" aria-label="Schließen">←</button>
+    <div></div>
+  </div>
+  <div class="letter-body">
+    <div class="letter-title serif">Bevor wir starten…</div>
+    <div class="letter-text" id="letter-text"></div>
+  </div>
+</div>
+
+<script>
+// ============ STORAGE ============
+const Store = (()=>{
+  let ok=false; const mem={};
+  try{ localStorage.setItem('__t','1'); localStorage.removeItem('__t'); ok=true; }catch(e){}
+  return {
+    get(k){ try{ if(ok) return localStorage.getItem(k); }catch(e){} return mem[k]||null; },
+    set(k,v){ try{ if(ok){ localStorage.setItem(k,v); return true; } }catch(e){
+      const b=document.getElementById('banner'); if(b){b.style.display='block';b.textContent='Speicher voll. Bitte ein paar Fotos aus dem Tagebuch löschen.';}
+      return false;
+    } mem[k]=v; return true; },
+    available: ok
+  };
+})();
+const J = { get:(k,d)=>{ try{return JSON.parse(Store.get(k))??d}catch(e){return d}}, set:(k,v)=>Store.set(k,JSON.stringify(v)) };
+
+// ============ FIXED CONFIG ============
+const TRIP = { d1:'2026-06-04', d2:'2026-06-08', t1:'16:25' };
+const LETTER_TEXT = `Bevor wir starten, will ich dir nur sagen, dass die nächsten Tage ganz uns gehören.
+
+Ich freue mich auf jedes Gespräch, jedes Abenteuer, jeden spontanen Moment und vor allem darauf, dein Lachen zu sehen.
+
+Ich freue mich auf alles was kommt.`;
+
+const DEFAULT_CHALLENGES = [
+  'Selfie mit einem Esel',
+  'Kulinarik',
+  'Naturwunder',
+  'Kunst auf der Straße',
+  'Ein alberner Moment',
+  'Mallorquinisches Detail',
+  'Unsere Schatten',
+  'Nähe',
+  'Roadtrip',
+  'Romantik?'
+];
+
+// ============ STATE ============
+let entries = J.get('entries', []); // {id, ts, text, photo, loc, challengeId?}
+let challenges = J.get('challenges', null);
+if(!challenges){
+  challenges = DEFAULT_CHALLENGES.map(t=>({id:uid(), text:t, done:false, entryId:null}));
+  J.set('challenges',challenges);
+}
+let flags = J.get('flags', {seenSplash:false, nervlevel:null, installDismissed:false});
+
+// migrate old shapes if present
+const oldPhotos = J.get('photos', null);
+const oldMems = J.get('memories', null);
+if((oldPhotos&&oldPhotos.length)||(oldMems&&oldMems.length)){
+  if(oldPhotos) oldPhotos.forEach(p=>entries.push({id:uid(),ts:p.ts,text:'',photo:p.data,loc:''}));
+  if(oldMems) oldMems.forEach(m=>entries.push({id:uid(),ts:m.ts,text:(m.mood?m.mood+' ':'')+m.text,photo:null,loc:''}));
+  Store.set('photos','[]'); Store.set('memories','[]');
+  J.set('entries',entries);
+}
+
+let curSplashLvl = null;
+let editingEntryId = null;
+let pendingPhoto = null;
+let pendingPhotoFile = null;
+let pendingChallengeId = null;
+
+function uid(){ return Math.random().toString(36).slice(2,10) }
+function persist(){ J.set('entries',entries); J.set('challenges',challenges); J.set('flags',flags); }
+
+// ============ DATES ============
+const MONS = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+const MONS_LONG = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+const DAYS = ['So','Mo','Di','Mi','Do','Fr','Sa'];
+const DAYS_LONG = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+
+function parseD(s){ return new Date(s+'T00:00:00') }
+function eachDay(){
+  const days=[]; const a=parseD(TRIP.d1), b=parseD(TRIP.d2);
+  const d=new Date(a);
+  while(d<=b){ days.push(new Date(d)); d.setDate(d.getDate()+1); }
+  return days;
+}
+function isoDay(d){ const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),da=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${da}` }
+function fmtTime(ts){ const d=new Date(ts); return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}` }
+function fmtEntryMeta(ts){ const d=new Date(ts); return `${DAYS[d.getDay()]}, ${d.getDate()}. ${MONS[d.getMonth()]} · ${fmtTime(ts)}` }
+
+function phase(){
+  const now = new Date();
+  const start = parseD(TRIP.d1);
+  const end = new Date(TRIP.d2+'T23:59:59');
+  if(now < start) return 'pre';
+  if(now > end) return 'post';
+  return 'live';
+}
+function tripDayNum(){
+  const now=new Date();
+  const days = eachDay();
+  for(let i=0;i<days.length;i++) if(days[i].toDateString()===now.toDateString()) return i+1;
+  return 0;
+}
+
+function esc(s){ return (s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])) }
+function mapsLink(q){ return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}` }
+
+// ============ SPLASH ============
+function showSplash(){
+  if(flags.seenSplash){ document.getElementById('splash').classList.add('hide'); return; }
+  document.getElementById('splash').classList.remove('hide');
+}
+document.querySelectorAll('.lvl').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.lvl').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    curSplashLvl = parseInt(b.dataset.l,10);
+    document.getElementById('splash-next').disabled = false;
+  });
+});
+document.getElementById('splash-next').addEventListener('click',()=>{
+  if(curSplashLvl===null) return;
+  flags.seenSplash = true;
+  flags.nervlevel = curSplashLvl;
+  entries.push({
+    id:uid(), ts:Date.now(),
+    text: `Vor der Reise — Angst Potter: ${curSplashLvl}/10 😂`,
+    photo:null, loc:''
+  });
+  persist();
+  document.getElementById('splash').classList.add('hide');
+  renderAll();
+});
+document.getElementById('splash-home').addEventListener('click',()=>{
+  document.getElementById('inst').classList.add('open');
+});
+document.getElementById('inst-close').addEventListener('click',()=>{
+  document.getElementById('inst').classList.remove('open');
+});
+
+// ============ RENDER START BODY (phase-aware) ============
+function renderStart(){
+  const body = document.getElementById('start-body');
+  const p = phase();
+  body.innerHTML = '';
+
+  if(p==='pre'){
+    body.appendChild(makeCountdown());
+    if(flags.nervlevel) body.appendChild(makeNervCard());
+    body.appendChild(makeChallengeTeaser());
+  } else if(p==='live'){
+    body.appendChild(makeLiveCard());
+    body.appendChild(makeChallengeTeaser());
+    if(shouldShowEveningPrompt()) body.appendChild(makeEveningPrompt());
+  } else {
+    body.appendChild(makeRecapCard());
+  }
+}
+
+function makeCountdown(){
+  const div = document.createElement('div'); div.className='card';
+  div.innerHTML = `
+    <div class="card-label" id="cd-label">Bis es losgeht</div>
+    <div class="cd-grid">
+      <div class="cd-cell"><div class="cd-num" id="cd-d">0</div><div class="cd-unit">Tage</div></div>
+      <div class="cd-cell"><div class="cd-num" id="cd-h">0</div><div class="cd-unit">Std</div></div>
+      <div class="cd-cell"><div class="cd-num" id="cd-m">0</div><div class="cd-unit">Min</div></div>
+      <div class="cd-cell"><div class="cd-num" id="cd-s">0</div><div class="cd-unit">Sek</div></div>
+    </div>`;
+  return div;
+}
+function makeNervCard(){
+  const div = document.createElement('div'); div.className='nerv-card';
+  div.innerHTML = `
+    <div class="nerv-emoji">😂</div>
+    <div class="nerv-text">
+      <div class="nerv-num">${flags.nervlevel}/10</div>
+      <div class="nerv-lbl">Angst Potter</div>
+    </div>`;
+  return div;
+}
+function makeChallengeTeaser(){
+  const done = challenges.filter(c=>c.done).length;
+  const total = challenges.length;
+  const div = document.createElement('div'); div.className='ch-teaser';
+  div.innerHTML = `
+    <div class="ch-teaser-icon">📸</div>
+    <div class="ch-teaser-text">
+      <div class="ch-teaser-t">${done} von ${total} Challenges</div>
+      <div class="ch-teaser-s">${done===0?'Eine Idee zum Loslegen?':done===total?'Alle geschafft. Wow.':'Noch '+(total-done)+' offen.'}</div>
+    </div>
+    <div class="ch-teaser-arrow">→</div>`;
+  div.addEventListener('click',()=>switchTab('ch'));
+  return div;
+}
+function makeLiveCard(){
+  const tdn = tripDayNum();
+  const total = eachDay().length;
+  const div = document.createElement('div'); div.className='card';
+  div.innerHTML = `
+    <div class="day-pill">Tag ${tdn} von ${total}</div>
+    <div class="live-title">${greetingForNow()}</div>
+    <div class="live-sub">${DAYS_LONG[new Date().getDay()]}, ${new Date().getDate()}. ${MONS[new Date().getMonth()]}</div>`;
+  return div;
+}
+function greetingForNow(){
+  const h = new Date().getHours();
+  if(h<5) return 'Noch wach, ihr zwei?';
+  if(h<11) return 'Guten Morgen, ihr zwei';
+  if(h<14) return 'Mitten im Tag';
+  if(h<18) return 'Nachmittags-Mood';
+  if(h<22) return 'Abend zu zweit';
+  return 'Spät noch';
+}
+function shouldShowEveningPrompt(){
+  const h = new Date().getHours();
+  if(h<19) return false;
+  const todayIso = isoDay(new Date());
+  const has = entries.some(e=> isoDay(new Date(e.ts))===todayIso);
+  return !has;
+}
+function makeEveningPrompt(){
+  const div = document.createElement('div'); div.className='prompt-card';
+  div.innerHTML = `
+    <div class="ph">Was bleibt von heute?</div>
+    <button id="prompt-open">Moment festhalten</button>`;
+  setTimeout(()=>{
+    document.getElementById('prompt-open')?.addEventListener('click',()=>{ switchTab('diary'); openEntrySheet(); });
+  },10);
+  return div;
+}
+function makeRecapCard(){
+  const photoCount = entries.filter(e=>e.photo).length;
+  const noteCount = entries.filter(e=>e.text).length;
+  const days = eachDay().length;
+  const div = document.createElement('div'); div.className='card recap-card';
+  div.innerHTML = `
+    <h2>Eine Erinnerung.</h2>
+    <p>Was bleibt, sind die Bilder im Kopf — und ein paar hier drin.</p>
+    <div class="recap-stats">
+      <div><div class="rs-num">${days}</div><div class="rs-lbl">Tage</div></div>
+      <div><div class="rs-num">${photoCount}</div><div class="rs-lbl">Bilder</div></div>
+      <div><div class="rs-num">${noteCount}</div><div class="rs-lbl">Gedanken</div></div>
+    </div>`;
+  return div;
+}
+
+// ============ COUNTDOWN ============
+function updateCountdown(){
+  if(phase()!=='pre') return;
+  const target = new Date(`${TRIP.d1}T${TRIP.t1}:00`);
+  const diff = target - new Date();
+  if(diff<0) return;
+  const d=Math.floor(diff/864e5), h=Math.floor(diff/36e5)%24, m=Math.floor(diff/6e4)%60, s=Math.floor(diff/1e3)%60;
+  const els = ['cd-d','cd-h','cd-m','cd-s'].map(id=>document.getElementById(id));
+  if(els[0]){ els[0].textContent=d; els[1].textContent=String(h).padStart(2,'0'); els[2].textContent=String(m).padStart(2,'0'); els[3].textContent=String(s).padStart(2,'0'); }
+}
+
+// ============ DIARY ============
+function renderDiary(){
+  const list = document.getElementById('diary-list');
+  if(entries.length===0){
+    list.innerHTML = `<div class="empty"><div class="empty-icon">📖</div>Noch keine Einträge.<br><span style="font-size:13px;opacity:.7">Tipp oben, um euren ersten Moment festzuhalten.</span></div>`;
+    return;
+  }
+  const sorted = entries.slice().sort((a,b)=>b.ts-a.ts);
+  let html = '';
+  for(const e of sorted){
+    const ch = e.challengeId ? challenges.find(c=>c.id===e.challengeId) : null;
+    html += `<div class="entry" data-id="${e.id}">
+      ${e.photo?`<div class="entry-img"><img src="${e.photo}" alt="" data-zoom="${e.id}"></div>`:''}
+      <div class="entry-body">
+        <div class="entry-meta">
+          <div class="entry-time">${fmtEntryMeta(e.ts)}</div>
+          <div class="entry-actions">
+            <button class="entry-action" data-edit="${e.id}" aria-label="Bearbeiten">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </button>
+            <button class="entry-action danger" data-del="${e.id}" aria-label="Löschen">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 01-2 2H9a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+            </button>
+          </div>
+        </div>
+        ${ch?`<div class="entry-badge">📸 ${esc(ch.text)}</div>`:''}
+        ${e.text?`<div class="entry-text">${esc(e.text)}</div>`:''}
+        ${e.loc?`<a class="entry-loc" href="${mapsLink(e.loc)}" target="_blank" rel="noopener">📍 ${esc(e.loc)}</a>`:''}
+      </div>
+    </div>`;
+  }
+  list.innerHTML = html;
+  list.querySelectorAll('[data-zoom]').forEach(img=>{
+    img.addEventListener('click',()=>openPhoto(img.dataset.zoom));
+  });
+  list.querySelectorAll('[data-edit]').forEach(b=>{
+    b.addEventListener('click',()=>openEntrySheet(b.dataset.edit));
+  });
+  list.querySelectorAll('[data-del]').forEach(b=>{
+    b.addEventListener('click',()=>deleteEntry(b.dataset.del));
+  });
+}
+
+function deleteEntry(id){
+  if(!confirm('Eintrag löschen?')) return;
+  // unlink challenge if linked
+  const ch = challenges.find(c=>c.entryId===id);
+  if(ch){ ch.done=false; ch.entryId=null; }
+  entries = entries.filter(x=>x.id!==id);
+  persist();
+  renderAll();
+}
+
+// ============ CHALLENGES ============
+function renderChallenges(){
+  const list = document.getElementById('ch-list');
+  list.innerHTML = challenges.map(c=>{
+    const entry = c.entryId ? entries.find(e=>e.id===c.entryId) : null;
+    const thumb = entry && entry.photo;
+    return `<div class="ch-item ${c.done?'done':''}" data-id="${c.id}">
+      ${thumb?`<div class="ch-thumb"><img src="${thumb}" alt=""></div>`:`<div class="ch-check"></div>`}
+      <div class="ch-text">${esc(c.text)}</div>
+      <button class="ch-del" data-del="${c.id}" aria-label="Löschen">✕</button>
+    </div>`;
+  }).join('');
+  list.querySelectorAll('.ch-item').forEach(it=>{
+    it.addEventListener('click',e=>{
+      if(e.target.closest('.ch-del')) return;
+      const id = it.dataset.id;
+      const c = challenges.find(x=>x.id===id);
+      if(!c) return;
+      if(c.done && c.entryId){
+        openEntrySheet(c.entryId);
+      } else {
+        openEntrySheetForChallenge(c);
+      }
+    });
+  });
+  list.querySelectorAll('[data-del]').forEach(b=>{
+    b.addEventListener('click',e=>{
+      e.stopPropagation();
+      const id = b.dataset.del;
+      const c = challenges.find(x=>x.id===id);
+      if(!c) return;
+      if(c.done && c.entryId){
+        if(!confirm('Diese Challenge entfernen? Der Tagebuch-Eintrag bleibt erhalten.')) return;
+        // unlink entry from challenge but keep entry
+        const ent = entries.find(x=>x.id===c.entryId);
+        if(ent) ent.challengeId = null;
+      } else {
+        if(!confirm('Challenge entfernen?')) return;
+      }
+      challenges = challenges.filter(x=>x.id!==id);
+      persist(); renderAll();
+    });
+  });
+  renderChallengeProgress();
+}
+function renderChallengeProgress(){
+  const wrap = document.getElementById('ch-progress-wrap');
+  const done = challenges.filter(c=>c.done).length;
+  const total = challenges.length;
+  const pct = total? Math.round(done/total*100) : 0;
+  wrap.innerHTML = `<div class="ch-progress">
+    <div class="ch-progress-meta">
+      <div><span class="ch-progress-num">${done}</span><span style="color:var(--ink-soft);margin-left:4px">/ ${total}</span></div>
+      <div class="ch-progress-lbl">${pct}% geschafft</div>
+    </div>
+    <div class="ch-bar"><div class="ch-bar-fill" style="width:${pct}%"></div></div>
+  </div>`;
+}
+document.getElementById('ch-add-btn').addEventListener('click',()=>{
+  const inp = document.getElementById('ch-input');
+  const v = inp.value.trim();
+  if(!v) return;
+  challenges.push({id:uid(), text:v, done:false, entryId:null});
+  inp.value='';
+  persist(); renderAll();
+});
+document.getElementById('ch-input').addEventListener('keydown',e=>{
+  if(e.key==='Enter') document.getElementById('ch-add-btn').click();
+});
+
+// ============ TABS ============
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active', x.dataset.p===name));
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById('p-'+name).classList.add('active');
+  window.scrollTo({top:0});
+}
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>switchTab(t.dataset.p));
+});
+
+// ============ ENTRY SHEET ============
+function openEntrySheet(id){
+  editingEntryId = id || null;
+  pendingChallengeId = null;
+  pendingPhoto = null;
+  const isEdit = !!id;
+  document.getElementById('en-h').textContent = isEdit ? 'Eintrag bearbeiten' : 'Neuer Eintrag';
+  document.getElementById('en-del-row').style.display = isEdit?'flex':'none';
+  document.getElementById('en-ch-banner').style.display = 'none';
+  if(isEdit){
+    const e = entries.find(x=>x.id===id);
+    document.getElementById('en-text').value = e?.text||'';
+    document.getElementById('en-loc').value = e?.loc||'';
+    pendingPhoto = e?.photo||null;
+    if(e?.challengeId){
+      const c = challenges.find(x=>x.id===e.challengeId);
+      if(c) showChBanner(c.text);
+      pendingChallengeId = e.challengeId;
+    }
+  } else {
+    document.getElementById('en-text').value = '';
+    document.getElementById('en-loc').value = '';
+  }
+  updatePreview();
+  document.getElementById('entry-sheet').classList.add('open');
+}
+function openEntrySheetForChallenge(ch){
+  editingEntryId = null;
+  pendingChallengeId = ch.id;
+  pendingPhoto = null;
+  document.getElementById('en-h').textContent = 'Challenge festhalten';
+  document.getElementById('en-del-row').style.display = 'none';
+  document.getElementById('en-text').value = '';
+  document.getElementById('en-loc').value = '';
+  showChBanner(ch.text);
+  updatePreview();
+  document.getElementById('entry-sheet').classList.add('open');
+}
+function showChBanner(t){
+  document.getElementById('en-ch-banner').style.display = 'flex';
+  document.getElementById('en-ch-banner-text').textContent = t;
+}
+function updatePreview(){
+  const prev = document.getElementById('en-prev');
+  if(pendingPhoto){ prev.classList.add('show'); document.getElementById('en-prev-img').src = pendingPhoto; }
+  else { prev.classList.remove('show'); }
+  const sp = document.getElementById('en-save-phone');
+  const canShare = pendingPhotoFile && navigator.canShare && navigator.canShare({files:[pendingPhotoFile]});
+  sp.style.display = canShare?'flex':'none';
+}
+document.getElementById('en-prev-x').addEventListener('click',()=>{ pendingPhoto=null; pendingPhotoFile=null; updatePreview(); });
+async function handleEntryFile(f){
+  if(!f) return;
+  pendingPhotoFile = f;
+  try { pendingPhoto = await compress(f); updatePreview(); }
+  catch(e){ console.error(e); alert('Foto konnte nicht geladen werden.'); }
+}
+document.getElementById('en-cam').addEventListener('change',e=>{ handleEntryFile(e.target.files[0]); e.target.value=''; });
+document.getElementById('en-gal').addEventListener('change',e=>{ handleEntryFile(e.target.files[0]); e.target.value=''; });
+document.getElementById('en-save-phone').addEventListener('click',async()=>{
+  if(!pendingPhotoFile) return;
+  if(!navigator.canShare || !navigator.canShare({files:[pendingPhotoFile]})){
+    alert('Speichern wird auf diesem Gerät nicht unterstützt. Tipp das Foto lange an, um es manuell zu sichern.');
+    return;
+  }
+  try{ await navigator.share({files:[pendingPhotoFile],title:'Mallorca'}); }catch(e){}
+});
+
+document.getElementById('en-save').addEventListener('click',()=>{
+  const text = document.getElementById('en-text').value.trim();
+  const loc = document.getElementById('en-loc').value.trim();
+  if(!text && !pendingPhoto && !loc && !pendingChallengeId){
+    alert('Schreib was, mach ein Foto oder gib einen Ort an.'); return;
+  }
+  if(editingEntryId){
+    const e = entries.find(x=>x.id===editingEntryId);
+    if(e){ e.text=text; e.loc=loc; e.photo=pendingPhoto; }
+  } else {
+    const newEntry = {id:uid(), ts:Date.now(), text, loc, photo:pendingPhoto};
+    if(pendingChallengeId){
+      newEntry.challengeId = pendingChallengeId;
+      const c = challenges.find(x=>x.id===pendingChallengeId);
+      if(c){ c.done = true; c.entryId = newEntry.id; }
+    }
+    entries.push(newEntry);
+  }
+  persist(); renderAll();
+  document.getElementById('entry-sheet').classList.remove('open');
+});
+document.getElementById('en-del').addEventListener('click',()=>{
+  if(!editingEntryId) return;
+  if(!confirm('Eintrag löschen?')) return;
+  const ch = challenges.find(c=>c.entryId===editingEntryId);
+  if(ch){ ch.done=false; ch.entryId=null; }
+  entries = entries.filter(x=>x.id!==editingEntryId);
+  persist(); renderAll();
+  document.getElementById('entry-sheet').classList.remove('open');
+});
+document.getElementById('add-entry').addEventListener('click',()=>openEntrySheet());
+
+// ============ SHEETS CLOSE ============
+document.querySelectorAll('[data-close]').forEach(b=>{
+  b.addEventListener('click',()=>document.getElementById(b.dataset.close).classList.remove('open'));
+});
+document.querySelectorAll('.sheet-bg').forEach(s=>{
+  s.addEventListener('click',e=>{ if(e.target===s) s.classList.remove('open'); });
+});
+
+// ============ PHOTO COMPRESS ============
+function compress(file){
+  return new Promise((res,rej)=>{
+    const r = new FileReader();
+    r.onload = ()=>{
+      const img = new Image();
+      img.onload = ()=>{
+        const max = 1100;
+        let {width:w, height:h} = img;
+        if(w>max||h>max){
+          if(w>h){ h=Math.round(h*max/w); w=max; } else { w=Math.round(w*max/h); h=max; }
+        }
+        const c = document.createElement('canvas');
+        c.width=w; c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        res(c.toDataURL('image/jpeg',0.72));
+      };
+      img.onerror=rej;
+      img.src = r.result;
+    };
+    r.onerror=rej;
+    r.readAsDataURL(file);
+  });
+}
+
+function openPhoto(id){
+  const e = entries.find(x=>x.id===id);
+  if(!e||!e.photo) return;
+  document.getElementById('pm-img').src = e.photo;
+  document.getElementById('photo-modal').classList.add('open');
+}
+document.getElementById('pm-close').addEventListener('click',()=>document.getElementById('photo-modal').classList.remove('open'));
+
+// ============ LETTER ============
+document.getElementById('open-letter').addEventListener('click',()=>{
+  document.getElementById('letter-text').textContent = LETTER_TEXT;
+  document.getElementById('letter').classList.add('open');
+});
+document.getElementById('letter-close').addEventListener('click',()=>document.getElementById('letter').classList.remove('open'));
+
+// ============ INSTALL HINT ============
+function isStandalone(){ return window.navigator.standalone===true || window.matchMedia('(display-mode: standalone)').matches }
+function refreshInstallHint(){
+  const el = document.getElementById('install-hint');
+  if(!isStandalone() && !flags.installDismissed){
+    el.style.display='flex';
+  } else {
+    el.style.display='none';
+  }
+}
+document.getElementById('install-hint').addEventListener('click',(e)=>{
+  if(e.target.id==='install-hint-x') return;
+  document.getElementById('inst').classList.add('open');
+});
+document.getElementById('install-hint-x').addEventListener('click',e=>{
+  e.stopPropagation();
+  flags.installDismissed = true;
+  persist();
+  refreshInstallHint();
+});
+
+// ============ INIT ============
+function renderAll(){
+  renderStart();
+  renderDiary();
+  renderChallenges();
+  refreshInstallHint();
+}
+function init(){
+  if(!Store.available){
+    const b = document.getElementById('banner');
+    b.style.display='block';
+    b.innerHTML = 'Vorschau-Modus: Speicherung läuft nur für diese Session. Beim Deploy werden Einträge dauerhaft gespeichert.';
+  }
+  showSplash();
+  renderAll();
+  setInterval(()=>{ updateCountdown(); }, 1000);
+  setInterval(()=>{ if(phase()!=='pre') renderStart(); }, 60000);
+}
+init();
+</script>
+</body>
+</html>
