@@ -306,7 +306,7 @@ input,textarea,select{font-family:inherit}
   <!-- START -->
   <section id="p-start" class="page active">
     <div class="hero">
-      <img class="hero-bg" src="https://images.unsplash.com/photo-1534917911-e787327fa568?w=1600&q=80&auto=format&fit=crop" alt="Mallorca" onerror="this.style.display='none'">
+      <img class="hero-bg" src="https://images.unsplash.com/photo-1544559288-84fed207c569?w=1600&q=80&auto=format&fit=crop" alt="Mallorca" onerror="this.style.display='none'">
       <button class="hero-fab fab-letter" id="open-letter" aria-label="Brief öffnen">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
       </button>
@@ -421,6 +421,34 @@ input,textarea,select{font-family:inherit}
 </div>
 
 <script>
+// ============ PWA MANIFEST (Android install) ============
+(function(){
+  function ic(s){
+    const c=document.createElement('canvas');c.width=c.height=s;
+    const x=c.getContext('2d');
+    const g=x.createLinearGradient(0,0,s,s);g.addColorStop(0,'#F4B58A');g.addColorStop(1,'#C97B63');
+    x.fillStyle=g;const r=s*0.22;
+    if(x.roundRect){x.beginPath();x.roundRect(0,0,s,s,r);x.fill();}
+    else{x.fillRect(0,0,s,s);}
+    x.fillStyle='#fff';x.font='italic '+Math.floor(s*0.5)+'px Georgia,serif';
+    x.textAlign='center';x.textBaseline='middle';
+    x.fillText('M',s/2,s/2+s*0.04);
+    return c.toDataURL('image/png');
+  }
+  const m={
+    name:'Mallorca · Dein Fotobuch',short_name:'Mallorca',
+    start_url:'./',scope:'./',display:'standalone',orientation:'portrait',
+    background_color:'#FBF4ED',theme_color:'#C97B63',
+    icons:[
+      {src:ic(192),sizes:'192x192',type:'image/png',purpose:'any'},
+      {src:ic(512),sizes:'512x512',type:'image/png',purpose:'any'}
+    ]
+  };
+  const b=new Blob([JSON.stringify(m)],{type:'application/manifest+json'});
+  const l=document.createElement('link');l.rel='manifest';l.href=URL.createObjectURL(b);
+  document.head.appendChild(l);
+})();
+
 // ============ STORAGE ============
 const Store = (()=>{
   let ok=false; const mem={};
