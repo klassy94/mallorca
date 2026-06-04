@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Mallorca">
 <meta name="theme-color" content="#C97B63">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23F4B58A'/%3E%3Cstop offset='1' stop-color='%23C97B63'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='url(%23g)'/%3E%3Ctext x='90' y='118' text-anchor='middle' font-family='Georgia,serif' font-style='italic' font-size='72' fill='%23fff'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23F4B58A'/%3E%3Cstop offset='1' stop-color='%23C97B63'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='url(%23g)'/%3E%3Ctext x='90' y='118' text-anchor='middle' font-family='Georgia,serif' font-style='italic' font-size='80' fill='%23fff'%3EM%3C/text%3E%3C/svg%3E">
 <title>Mallorca · Dein Fotobuch</title>
 <style>
 :root{
@@ -26,7 +26,6 @@ body{
 .serif{font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;font-style:italic;font-weight:400}
 button{font-family:inherit}
 input,textarea,select{font-family:inherit}
-
 .app{max-width:480px;margin:0 auto;min-height:100vh;position:relative;padding-bottom:88px;background:var(--bg)}
 .page{padding:0 20px 24px;display:none;animation:fade .25s ease}
 .page.active{display:block}
@@ -45,12 +44,22 @@ input,textarea,select{font-family:inherit}
 .splash-q h1{font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-weight:400;font-size:54px;line-height:1.1;margin-bottom:14px}
 .splash-q p{font-size:14px;opacity:.85;letter-spacing:.5px}
 .scale{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;width:100%}
-.lvl{width:100%;aspect-ratio:1;border-radius:50%;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;
+.lvl{width:100%;aspect-ratio:1;border-radius:50%;border:2px solid rgba(255,255,255,.4);color:#fff;
   font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-size:20px;cursor:pointer;transition:all .15s;
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  font-weight:400}
+.lvl[data-l="1"]{background:rgba(178,210,225,.78);color:#2A1A2E;border-color:rgba(178,210,225,.95)}
+.lvl[data-l="2"]{background:rgba(210,225,225,.78);color:#2A1A2E;border-color:rgba(210,225,225,.95)}
+.lvl[data-l="3"]{background:rgba(238,231,210,.82);color:#2A1A2E;border-color:rgba(238,231,210,.95)}
+.lvl[data-l="4"]{background:rgba(250,220,190,.85);color:#2A1A2E;border-color:rgba(250,220,190,.95)}
+.lvl[data-l="5"]{background:rgba(250,195,160,.88);color:#2A1A2E;border-color:rgba(250,195,160,.98)}
+.lvl[data-l="6"]{background:rgba(245,160,115,.92);color:#fff;border-color:rgba(245,160,115,1)}
+.lvl[data-l="7"]{background:rgba(232,130,90,.94);color:#fff;border-color:rgba(232,130,90,1)}
+.lvl[data-l="8"]{background:rgba(220,90,75,.95);color:#fff;border-color:rgba(220,90,75,1)}
+.lvl[data-l="9"]{background:rgba(208,55,65,.96);color:#fff;border-color:rgba(208,55,65,1)}
+.lvl[data-l="10"]{background:rgba(190,30,55,1);color:#fff;border-color:rgba(190,30,55,1)}
 .lvl:active{transform:scale(.92)}
-.lvl.on{background:#fff;color:var(--rose-deep);border-color:#fff;transform:scale(1.05);box-shadow:0 8px 24px rgba(0,0,0,.25)}
-.scale-legend{display:flex;justify-content:space-between;width:100%;font-size:11px;opacity:.75;margin-top:-12px;letter-spacing:.3px}
+.lvl.on{transform:scale(1.1);box-shadow:0 8px 28px rgba(0,0,0,.3);border-color:#fff;border-width:3px}
+.scale-legend{display:flex;justify-content:space-between;width:100%;font-size:11px;opacity:.78;margin-top:-12px;letter-spacing:.3px}
 .splash-actions{display:flex;flex-direction:column;gap:14px;width:100%;margin-top:8px}
 .btn-light{background:#fff;color:var(--rose-deep);border:none;padding:16px;border-radius:14px;font-weight:700;font-size:15px;cursor:pointer;letter-spacing:.3px;box-shadow:0 8px 24px rgba(0,0,0,.18)}
 .btn-light:disabled{opacity:.35;box-shadow:none;cursor:not-allowed}
@@ -84,18 +93,26 @@ input,textarea,select{font-family:inherit}
 .hero::before{content:'';position:absolute;inset:0;z-index:1;
   background:linear-gradient(to bottom,rgba(20,10,20,.12) 0%,rgba(20,10,20,.25) 45%,rgba(40,15,30,.7) 82%,rgba(50,20,35,.88) 100%);
   pointer-events:none}
+.hero.phase-post::before{background:linear-gradient(to bottom,rgba(40,20,30,.4) 0%,rgba(50,25,40,.55) 50%,rgba(60,30,45,.85) 100%);filter:sepia(0.2)}
+.hero.phase-live::before{background:linear-gradient(to bottom,rgba(20,10,20,.05) 0%,rgba(20,10,20,.2) 45%,rgba(40,15,30,.65) 82%,rgba(50,20,35,.85) 100%)}
 .hero::after{content:'';position:absolute;inset:0;z-index:1;
   background:radial-gradient(circle at 82% 14%,rgba(255,220,180,.22),transparent 42%);
   pointer-events:none}
 .hero-content{position:relative;z-index:2}
-.eyebrow{font-size:11px;letter-spacing:4px;text-transform:uppercase;opacity:.9;margin-bottom:14px;font-weight:600}
-.hero h1{font-size:60px;line-height:1;margin-bottom:18px}
-.hero-dates{font-size:14px;opacity:.92;font-weight:500;letter-spacing:.5px}
 .hero-fab{position:absolute;width:38px;height:38px;border-radius:50%;
   background:rgba(255,255,255,.22);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;top:calc(20px + env(safe-area-inset-top));right:18px}
+  border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:3;top:calc(20px + env(safe-area-inset-top));right:18px}
+.fab-letter{width:46px;height:46px;background:rgba(255,255,255,.97);border:2.5px solid #E63946;box-shadow:0 4px 18px rgba(230,57,70,.4),0 2px 8px rgba(0,0,0,.18);backdrop-filter:none;-webkit-backdrop-filter:none}
 .fab-letter svg{transition:transform .3s}
 .fab-letter:active svg{transform:scale(1.3)}
+.fab-hint{position:absolute;top:calc(22px + env(safe-area-inset-top));right:78px;background:#fff;color:var(--ink);padding:8px 12px 8px 14px;border-radius:14px;font-size:12px;font-weight:600;box-shadow:0 4px 14px rgba(0,0,0,.18);z-index:3;display:none;animation:hintIn .5s ease}
+.fab-hint::after{content:'';position:absolute;right:-7px;top:50%;transform:translateY(-50%);width:0;height:0;border-left:7px solid #fff;border-top:6px solid transparent;border-bottom:6px solid transparent}
+.fab-hint.show{display:block}
+@keyframes hintIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:none}}
+
+.eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;opacity:.9;margin-bottom:14px;font-weight:600}
+.hero h1{font-size:60px;line-height:1;margin-bottom:18px}
+.hero-dates{font-size:14px;opacity:.92;font-weight:500;letter-spacing:.5px}
 
 /* ============ CARDS ============ */
 .card{background:var(--surface);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
@@ -109,9 +126,28 @@ input,textarea,select{font-family:inherit}
 .live-title{font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-size:30px;line-height:1.1;margin-bottom:6px}
 .live-sub{font-size:14px;color:var(--ink-soft);margin-bottom:14px}
 
-.prompt-card{background:linear-gradient(135deg,#FDE8DC 0%,#F4D2BE 100%);color:var(--ink);padding:20px;border-radius:var(--r);margin-bottom:14px;box-shadow:var(--shadow)}
-.prompt-card .ph{font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-size:21px;line-height:1.25;margin-bottom:12px}
-.prompt-card button{background:var(--rose-deep);color:#fff;border:none;padding:11px 18px;border-radius:12px;font-weight:600;font-size:14px;cursor:pointer}
+/* Live hub: prompt + last entry + challenge suggestion */
+.live-prompt{background:linear-gradient(135deg,#FDE8DC 0%,#F4D2BE 100%);padding:16px 18px;border-radius:14px;margin-top:14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.lp-text{font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-size:17px;line-height:1.25;flex:1}
+.lp-btn{background:var(--rose-deep);color:#fff;border:none;padding:10px 16px;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer;white-space:nowrap}
+.lp-btn:active{transform:scale(.95)}
+
+.live-last{margin-top:14px;border-top:1px solid rgba(42,26,46,.07);padding-top:14px;cursor:pointer}
+.ll-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-soft);font-weight:700;margin-bottom:8px}
+.ll-row{display:flex;gap:12px;align-items:flex-start}
+.ll-photo{width:64px;height:64px;border-radius:10px;overflow:hidden;background:#EDE3DA;flex-shrink:0}
+.ll-photo img{width:100%;height:100%;object-fit:cover}
+.ll-body{flex:1;min-width:0}
+.ll-text{font-size:14px;line-height:1.4;color:var(--ink);margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.ll-time{font-size:11px;color:var(--ink-soft);letter-spacing:.3px}
+
+.live-sugg{margin-top:14px;background:#FAF1E8;padding:12px 14px;border-radius:12px;display:flex;align-items:center;gap:12px;cursor:pointer;border:1.5px dashed var(--rose-soft)}
+.live-sugg:active{transform:scale(.98)}
+.ls-icon{font-size:22px}
+.ls-body{flex:1;min-width:0}
+.ls-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-soft);font-weight:700;margin-bottom:2px}
+.ls-text{font-size:14px;font-weight:500;color:var(--ink)}
+.ls-arrow{color:var(--rose);font-size:18px;font-weight:600}
 
 .nerv-card{background:var(--surface);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);margin-bottom:14px;display:flex;align-items:center;gap:14px}
 .nerv-emoji{font-size:34px}
@@ -127,12 +163,26 @@ input,textarea,select{font-family:inherit}
 .ch-teaser-s{font-size:12px;color:var(--ink-soft);margin-top:2px}
 .ch-teaser-arrow{color:var(--rose);font-size:20px}
 
+/* Recap */
+.recap-photo{margin:0 -20px 14px;border-radius:0;overflow:hidden;height:240px;position:relative}
+.recap-photo img{width:100%;height:100%;object-fit:cover}
+.recap-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,.6) 100%)}
+.recap-photo .rp-cap{position:absolute;bottom:18px;left:24px;right:24px;color:#fff;font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-size:16px;line-height:1.4;z-index:1}
 .recap-card{text-align:center;padding:24px}
 .recap-card h2{font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-size:30px;margin-bottom:6px}
 .recap-card p{color:var(--ink-soft);font-size:14px;margin-bottom:18px}
-.recap-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px}
+.recap-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:8px}
 .rs-num{font-family:"Iowan Old Style",Georgia,serif;font-size:30px;color:var(--rose);line-height:1}
 .rs-lbl{font-size:10.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.8px;margin-top:4px}
+.recap-quote{background:linear-gradient(135deg,#FDE8DC 0%,#F4D2BE 100%);padding:24px 22px;text-align:center}
+.rq-marks{font-family:"Iowan Old Style",Georgia,serif;font-size:50px;color:var(--rose);line-height:.3;height:30px;opacity:.5}
+.rq-text{font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-size:17px;line-height:1.5;color:var(--ink);margin-top:8px}
+
+/* PDF Export Button */
+.export-btn{width:100%;padding:16px 18px;background:linear-gradient(135deg,#2A1A2E 0%,#4A2C42 100%);color:#fff;border:none;border-radius:14px;font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;margin-bottom:14px;box-shadow:0 6px 18px rgba(42,26,46,.25);transition:transform .15s}
+.export-btn:active{transform:scale(.98)}
+.export-btn .icon{font-size:18px;line-height:1}
+.export-sub{font-size:12px;color:var(--ink-soft);text-align:center;margin:-8px 0 14px;letter-spacing:.3px}
 
 .install-hint{background:transparent;border:1.5px dashed var(--rose-soft);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer}
 .install-hint:active{background:rgba(241,213,200,.3)}
@@ -142,25 +192,33 @@ input,textarea,select{font-family:inherit}
 .section-title{font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-size:26px;margin:8px 0 14px;color:var(--ink)}
 .section-sub{font-size:13px;color:var(--ink-soft);margin-bottom:18px;margin-top:-10px}
 
-/* ============ TAGEBUCH ============ */
-.add-entry-btn{width:100%;padding:14px;background:var(--rose);color:#fff;border:none;border-radius:14px;font-weight:600;font-size:14px;cursor:pointer;margin-bottom:18px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:var(--shadow)}
+/* ============ TAGEBUCH (polaroid feel) ============ */
+.add-entry-btn{width:100%;padding:14px;background:var(--rose);color:#fff;border:none;border-radius:14px;font-weight:600;font-size:14px;cursor:pointer;margin-bottom:22px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:var(--shadow)}
 .add-entry-btn:active{transform:scale(.98)}
-.entry{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden;position:relative}
-.entry-img{width:100%;display:block;background:#EDE3DA}
+.entry{background:var(--surface);border-radius:6px;box-shadow:0 8px 24px rgba(42,26,46,.09),0 1px 3px rgba(42,26,46,.05);margin-bottom:24px;position:relative;padding:14px 14px 18px}
+.entry[data-di="0"]{background:#FFFCF7}
+.entry[data-di="1"]{background:#FFF8EF}
+.entry[data-di="2"]{background:#FDF2E5}
+.entry[data-di="3"]{background:#FBEEDE}
+.entry[data-di="4"]{background:#F9E9D6}
+.entry:nth-child(3n+1){transform:rotate(-0.35deg)}
+.entry:nth-child(3n+2){transform:rotate(0.4deg)}
+.entry-sticker{position:absolute;top:-8px;left:18px;background:var(--rose);color:#fff;padding:5px 12px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transform:rotate(-2deg);box-shadow:0 3px 8px rgba(201,123,99,.45);z-index:1}
+.entry-img{display:block;background:#EDE3DA;border-radius:3px;overflow:hidden;margin-bottom:12px}
 .entry-img img{width:100%;display:block;object-fit:cover;max-height:480px}
-.entry-body{padding:14px 16px 16px}
-.entry-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px}
-.entry-time{font-size:11px;color:var(--ink-soft);letter-spacing:.5px;text-transform:uppercase;font-weight:600}
-.entry-actions{display:flex;gap:2px}
-.entry-action{background:none;border:none;color:#C4B5BD;cursor:pointer;padding:6px 8px;font-size:14px;border-radius:8px}
-.entry-action:active{background:rgba(0,0,0,.05)}
+.entry-actions{position:absolute;top:8px;right:8px;display:flex;gap:2px;z-index:2}
+.entry-action{background:rgba(255,255,255,.85);border:none;color:#9B8990;cursor:pointer;padding:6px;border-radius:8px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.entry-action:active{background:#fff}
 .entry-action.danger:active{color:#C04848}
-.entry-badge{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-bottom:8px}
-.entry-text{font-size:15px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
-.entry-loc{margin-top:10px;font-size:13px;color:var(--rose);display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.entry-badge{display:inline-block;background:var(--rose-soft);color:var(--rose-deep);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-bottom:10px}
+.entry-text{font-size:15px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;padding:0 4px}
+.entry-loc{margin-top:10px;font-size:13px;color:var(--rose);display:inline-flex;align-items:center;gap:6px;text-decoration:none;padding:0 4px}
 .entry-loc:active{opacity:.6}
-.empty{text-align:center;padding:50px 20px;color:var(--ink-soft);background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow)}
-.empty-icon{font-size:36px;margin-bottom:10px;opacity:.4}
+.empty{text-align:center;padding:40px 22px 36px;color:var(--ink-soft);background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow)}
+.empty-icon{font-size:38px;margin-bottom:12px;opacity:.5}
+.empty strong{display:block;color:var(--ink);font-size:17px;font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-weight:400;margin-bottom:8px;line-height:1.3}
+.empty span{display:block;margin-bottom:16px}
+.empty-cta{background:var(--rose);color:#fff;border:none;padding:11px 22px;border-radius:12px;font-weight:600;font-size:14px;cursor:pointer}
 
 /* ============ CHALLENGES ============ */
 .ch-card{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;margin-bottom:18px}
@@ -190,9 +248,12 @@ input,textarea,select{font-family:inherit}
   background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border-top:1px solid rgba(42,26,46,.07);display:flex;
   padding:8px 0 calc(10px + env(safe-area-inset-bottom));z-index:100}
-.tab{flex:1;border:none;background:transparent;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;color:#9B8990;font-size:10.5px;font-weight:600;cursor:pointer;transition:color .2s;letter-spacing:.3px}
-.tab svg{width:23px;height:23px}
-.tab.active{color:var(--rose)}
+.tab{flex:1;border:none;background:transparent;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 4px 2px;color:#9B8990;font-size:10.5px;font-weight:600;cursor:pointer;transition:color .2s;letter-spacing:.3px}
+.tab-icon{display:flex;align-items:center;justify-content:center;width:54px;height:30px;border-radius:16px;transition:all .25s ease}
+.tab.active .tab-icon{background:var(--rose-soft);box-shadow:0 2px 10px rgba(201,123,99,.25)}
+.tab svg{width:22px;height:22px;transition:transform .25s ease}
+.tab.active svg{transform:scale(1.08)}
+.tab.active{color:var(--rose);font-weight:700}
 
 /* ============ MODALS ============ */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
@@ -236,6 +297,17 @@ input,textarea,select{font-family:inherit}
 .letter-title{text-align:center;font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-size:34px;line-height:1.15;color:var(--ink);margin-bottom:32px}
 .letter-text{font-family:"Iowan Old Style",Georgia,serif;font-size:17px;line-height:1.7;color:var(--ink);white-space:pre-wrap;text-align:left}
 
+/* ============ PDF LOADER ============ */
+.pdf-loader{position:fixed;inset:0;z-index:700;background:rgba(40,20,40,.92);display:none;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.pdf-loader.open{display:flex;animation:fade .25s}
+.pdf-loader-card{background:var(--bg);border-radius:24px;padding:36px 28px;max-width:340px;width:100%;text-align:center;box-shadow:var(--shadow-lg)}
+.pdf-loader-card h3{font-family:"Iowan Old Style",Georgia,serif;font-style:italic;font-size:24px;margin-bottom:8px}
+.pdf-loader-card p{font-size:14px;color:var(--ink-soft);margin-bottom:20px}
+.pdf-spinner{width:48px;height:48px;border:3px solid var(--rose-soft);border-top-color:var(--rose);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 18px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pdf-bar{height:6px;background:#F1E5DC;border-radius:3px;overflow:hidden;margin-top:14px}
+.pdf-bar-fill{height:100%;background:linear-gradient(90deg,var(--rose-soft),var(--rose));width:0;transition:width .3s ease}
+
 .banner{background:#FFF4E0;color:#7A5A1F;padding:11px 14px;border-radius:12px;font-size:12.5px;margin-bottom:14px;line-height:1.4}
 </style>
 </head>
@@ -278,25 +350,23 @@ input,textarea,select{font-family:inherit}
   <div class="inst-card">
     <h2>Auf den Home-Bildschirm</h2>
     <p class="sub">So bleibt die App immer einen Tap entfernt:</p>
-    <div class="step">
-      <div class="step-n">1</div>
-      <div class="step-t">Diese Seite in <b>Safari</b> öffnen (nicht in einem anderen Browser).</div>
-    </div>
-    <div class="step">
-      <div class="step-n">2</div>
-      <div class="step-t">Tippe unten auf das Teilen-Symbol
-        <svg class="share-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C97B63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-n">3</div>
-      <div class="step-t">Scroll runter zu <b>„Zum Home-Bildschirm"</b>.</div>
-    </div>
-    <div class="step">
-      <div class="step-n">4</div>
-      <div class="step-t">Bestätige mit <b>„Hinzufügen"</b>.</div>
-    </div>
+    <div class="step"><div class="step-n">1</div><div class="step-t">Diese Seite in <b>Safari</b> (iPhone) oder <b>Chrome</b> (Android) öffnen.</div></div>
+    <div class="step"><div class="step-n">2</div><div class="step-t">Tippe auf das Teilen-Symbol
+      <svg class="share-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C97B63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+    </div></div>
+    <div class="step"><div class="step-n">3</div><div class="step-t">Wähle <b>„Zum Home-Bildschirm"</b>.</div></div>
+    <div class="step"><div class="step-n">4</div><div class="step-t">Bestätige mit <b>„Hinzufügen"</b>.</div></div>
     <button class="inst-close" id="inst-close">Verstanden</button>
+  </div>
+</div>
+
+<!-- ============ PDF LOADER ============ -->
+<div id="pdf-loader" class="pdf-loader">
+  <div class="pdf-loader-card">
+    <div class="pdf-spinner"></div>
+    <h3>Dein Fotobuch entsteht</h3>
+    <p id="pdf-loader-text">Lade Bibliotheken…</p>
+    <div class="pdf-bar"><div class="pdf-bar-fill" id="pdf-bar-fill"></div></div>
   </div>
 </div>
 
@@ -305,11 +375,12 @@ input,textarea,select{font-family:inherit}
 
   <!-- START -->
   <section id="p-start" class="page active">
-    <div class="hero">
-      <img class="hero-bg" src="https://images.unsplash.com/photo-1544559288-84fed207c569?w=1600&q=80&auto=format&fit=crop" alt="Mallorca" onerror="this.style.display='none'">
+    <div class="hero" id="hero">
       <button class="hero-fab fab-letter" id="open-letter" aria-label="Brief öffnen">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#E63946"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
       </button>
+      <div class="fab-hint" id="fab-hint">für dich</div>
+      <img class="hero-bg" src="https://images.unsplash.com/photo-1544559288-84fed207c569?w=1600&q=80&auto=format&fit=crop" alt="Mallorca" onerror="this.style.display='none'">
       <div class="hero-content">
         <div class="eyebrow">Dein Fotobuch</div>
         <h1 class="serif">Mallorca</h1>
@@ -325,6 +396,12 @@ input,textarea,select{font-family:inherit}
     </div>
 
     <div id="start-body"></div>
+
+    <button class="export-btn" id="export-btn">
+      <span class="icon">📖</span>
+      Als Fotobuch exportieren (PDF)
+    </button>
+    <div class="export-sub">A4 · druck- und teilbar</div>
   </section>
 
   <!-- TAGEBUCH -->
@@ -354,15 +431,15 @@ input,textarea,select{font-family:inherit}
 
   <nav class="tabs">
     <button class="tab active" data-p="start">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12L12 4l9 8"/><path d="M5 10v9a1 1 0 001 1h3v-6h6v6h3a1 1 0 001-1v-9"/></svg>
+      <span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2h-4v-7h-6v7H5a2 2 0 01-2-2z"/></svg></span>
       Start
     </button>
     <button class="tab" data-p="diary">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+      <span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></span>
       Tagebuch
     </button>
     <button class="tab" data-p="ch">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      <span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></span>
       Challenge
     </button>
   </nav>
@@ -473,36 +550,18 @@ Ich freue mich auf jedes Gespräch, jedes Abenteuer, jeden spontanen Moment und 
 Ich freue mich auf alles was kommt.`;
 
 const DEFAULT_CHALLENGES = [
-  'Selfie mit einem Esel',
-  'Kulinarik',
-  'Naturwunder',
-  'Kunst auf der Straße',
-  'Ein alberner Moment',
-  'Mallorquinisches Detail',
-  'Unsere Schatten',
-  'Nähe',
-  'Roadtrip',
-  'Romantik?'
+  'Selfie mit einem Esel','Kulinarik','Naturwunder','Kunst auf der Straße','Ein alberner Moment',
+  'Mallorquinisches Detail','Unsere Schatten','Nähe','Roadtrip','Romantik?'
 ];
 
 // ============ STATE ============
-let entries = J.get('entries', []); // {id, ts, text, photo, loc, challengeId?}
+let entries = J.get('entries', []);
 let challenges = J.get('challenges', null);
 if(!challenges){
   challenges = DEFAULT_CHALLENGES.map(t=>({id:uid(), text:t, done:false, entryId:null}));
   J.set('challenges',challenges);
 }
-let flags = J.get('flags', {seenSplash:false, nervlevel:null, installDismissed:false});
-
-// migrate old shapes if present
-const oldPhotos = J.get('photos', null);
-const oldMems = J.get('memories', null);
-if((oldPhotos&&oldPhotos.length)||(oldMems&&oldMems.length)){
-  if(oldPhotos) oldPhotos.forEach(p=>entries.push({id:uid(),ts:p.ts,text:'',photo:p.data,loc:''}));
-  if(oldMems) oldMems.forEach(m=>entries.push({id:uid(),ts:m.ts,text:(m.mood?m.mood+' ':'')+m.text,photo:null,loc:''}));
-  Store.set('photos','[]'); Store.set('memories','[]');
-  J.set('entries',entries);
-}
+let flags = J.get('flags', {seenSplash:false, nervlevel:null, installDismissed:false, letterHintShown:false});
 
 let curSplashLvl = null;
 let editingEntryId = null;
@@ -512,6 +571,7 @@ let pendingChallengeId = null;
 
 function uid(){ return Math.random().toString(36).slice(2,10) }
 function persist(){ J.set('entries',entries); J.set('challenges',challenges); J.set('flags',flags); }
+function hap(ms){ if(navigator.vibrate) try{navigator.vibrate(ms)}catch(e){} }
 
 // ============ DATES ============
 const MONS = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
@@ -529,6 +589,7 @@ function eachDay(){
 function isoDay(d){ const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),da=String(d.getDate()).padStart(2,'0'); return `${y}-${m}-${da}` }
 function fmtTime(ts){ const d=new Date(ts); return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}` }
 function fmtEntryMeta(ts){ const d=new Date(ts); return `${DAYS[d.getDay()]}, ${d.getDate()}. ${MONS[d.getMonth()]} · ${fmtTime(ts)}` }
+function tripDayIdx(ts){ const start=parseD(TRIP.d1); const diff=Math.floor((new Date(ts)-start)/86400000); return Math.max(0,Math.min(diff,4)) }
 
 function phase(){
   const now = new Date();
@@ -559,6 +620,7 @@ document.querySelectorAll('.lvl').forEach(b=>{
     b.classList.add('on');
     curSplashLvl = parseInt(b.dataset.l,10);
     document.getElementById('splash-next').disabled = false;
+    hap(8);
   });
 });
 document.getElementById('splash-next').addEventListener('click',()=>{
@@ -573,6 +635,14 @@ document.getElementById('splash-next').addEventListener('click',()=>{
   persist();
   document.getElementById('splash').classList.add('hide');
   renderAll();
+  // First-time letter hint
+  if(!flags.letterHintShown){
+    setTimeout(()=>{
+      document.getElementById('fab-hint').classList.add('show');
+      setTimeout(()=>document.getElementById('fab-hint').classList.remove('show'), 4500);
+      flags.letterHintShown = true; persist();
+    }, 800);
+  }
 });
 document.getElementById('splash-home').addEventListener('click',()=>{
   document.getElementById('inst').classList.add('open');
@@ -585,6 +655,9 @@ document.getElementById('inst-close').addEventListener('click',()=>{
 function renderStart(){
   const body = document.getElementById('start-body');
   const p = phase();
+  const hero = document.getElementById('hero');
+  hero.classList.remove('phase-pre','phase-live','phase-post');
+  hero.classList.add('phase-'+p);
   body.innerHTML = '';
 
   if(p==='pre'){
@@ -592,11 +665,9 @@ function renderStart(){
     if(flags.nervlevel) body.appendChild(makeNervCard());
     body.appendChild(makeChallengeTeaser());
   } else if(p==='live'){
-    body.appendChild(makeLiveCard());
-    body.appendChild(makeChallengeTeaser());
-    if(shouldShowEveningPrompt()) body.appendChild(makeEveningPrompt());
+    body.appendChild(makeLiveHub());
   } else {
-    body.appendChild(makeRecapCard());
+    appendRecap(body);
   }
 }
 
@@ -636,16 +707,55 @@ function makeChallengeTeaser(){
   div.addEventListener('click',()=>switchTab('ch'));
   return div;
 }
-function makeLiveCard(){
+
+function makeLiveHub(){
   const tdn = tripDayNum();
   const total = eachDay().length;
+  const last = entries.slice().sort((a,b)=>b.ts-a.ts)[0];
+  const openCh = challenges.filter(c=>!c.done);
+  const suggested = openCh.length>0 ? openCh[Math.floor(Math.random()*openCh.length)] : null;
   const div = document.createElement('div'); div.className='card';
-  div.innerHTML = `
+  let html = `
     <div class="day-pill">Tag ${tdn} von ${total}</div>
     <div class="live-title">${greetingForNow()}</div>
-    <div class="live-sub">${DAYS_LONG[new Date().getDay()]}, ${new Date().getDate()}. ${MONS[new Date().getMonth()]}</div>`;
+    <div class="live-sub">${DAYS_LONG[new Date().getDay()]}, ${new Date().getDate()}. ${MONS[new Date().getMonth()]}</div>
+    <div class="live-prompt">
+      <div class="lp-text">${promptForNow()}</div>
+      <button class="lp-btn" data-act="add-entry">Festhalten</button>
+    </div>`;
+  if(last && last.text){
+    html += `
+      <div class="live-last" data-act="open-last" data-id="${last.id}">
+        <div class="ll-label">Zuletzt</div>
+        <div class="ll-row">
+          ${last.photo?`<div class="ll-photo"><img src="${last.photo}" alt=""></div>`:''}
+          <div class="ll-body">
+            <div class="ll-text">${esc(last.text)}</div>
+            <div class="ll-time">${fmtEntryMeta(last.ts)}</div>
+          </div>
+        </div>
+      </div>`;
+  }
+  if(suggested){
+    html += `
+      <div class="live-sugg" data-act="goto-ch">
+        <div class="ls-icon">📸</div>
+        <div class="ls-body">
+          <div class="ls-label">Wie wär's mit…</div>
+          <div class="ls-text">${esc(suggested.text)}</div>
+        </div>
+        <div class="ls-arrow">→</div>
+      </div>`;
+  }
+  div.innerHTML = html;
+  setTimeout(()=>{
+    div.querySelector('[data-act="add-entry"]')?.addEventListener('click',()=>{switchTab('diary');setTimeout(()=>openEntrySheet(),100)});
+    div.querySelector('[data-act="open-last"]')?.addEventListener('click',e=>{switchTab('diary');});
+    div.querySelector('[data-act="goto-ch"]')?.addEventListener('click',()=>switchTab('ch'));
+  },10);
   return div;
 }
+
 function greetingForNow(){
   const h = new Date().getHours();
   if(h<5) return 'Noch wach, ihr zwei?';
@@ -655,37 +765,43 @@ function greetingForNow(){
   if(h<22) return 'Abend zu zweit';
   return 'Spät noch';
 }
-function shouldShowEveningPrompt(){
+function promptForNow(){
   const h = new Date().getHours();
-  if(h<19) return false;
-  const todayIso = isoDay(new Date());
-  const has = entries.some(e=> isoDay(new Date(e.ts))===todayIso);
-  return !has;
+  if(h<11) return 'Womit startet ihr heute?';
+  if(h<16) return 'Wie läuft der Tag?';
+  if(h<20) return 'Was war heute schön?';
+  return 'Was bleibt von heute?';
 }
-function makeEveningPrompt(){
-  const div = document.createElement('div'); div.className='prompt-card';
-  div.innerHTML = `
-    <div class="ph">Was bleibt von heute?</div>
-    <button id="prompt-open">Moment festhalten</button>`;
-  setTimeout(()=>{
-    document.getElementById('prompt-open')?.addEventListener('click',()=>{ switchTab('diary'); openEntrySheet(); });
-  },10);
-  return div;
-}
-function makeRecapCard(){
-  const photoCount = entries.filter(e=>e.photo).length;
-  const noteCount = entries.filter(e=>e.text).length;
+
+function appendRecap(body){
+  const photoEntries = entries.filter(e=>e.photo);
+  const textEntries = entries.filter(e=>e.text);
+  const heroPhoto = photoEntries.length>0 ? photoEntries[Math.floor(Math.random()*photoEntries.length)] : null;
+  const heroText = textEntries.length>0 ? textEntries[Math.floor(Math.random()*textEntries.length)] : null;
   const days = eachDay().length;
+
+  if(heroPhoto){
+    const photoDiv = document.createElement('div'); photoDiv.className='recap-photo';
+    photoDiv.innerHTML = `<img src="${heroPhoto.photo}" alt="">${heroPhoto.text?`<div class="rp-cap">${esc(heroPhoto.text.substring(0,100))}${heroPhoto.text.length>100?'…':''}</div>`:''}`;
+    body.appendChild(photoDiv);
+  }
+
   const div = document.createElement('div'); div.className='card recap-card';
   div.innerHTML = `
     <h2>Eine Erinnerung.</h2>
     <p>Was bleibt, sind die Bilder im Kopf — und ein paar hier drin.</p>
     <div class="recap-stats">
       <div><div class="rs-num">${days}</div><div class="rs-lbl">Tage</div></div>
-      <div><div class="rs-num">${photoCount}</div><div class="rs-lbl">Bilder</div></div>
-      <div><div class="rs-num">${noteCount}</div><div class="rs-lbl">Gedanken</div></div>
+      <div><div class="rs-num">${photoEntries.length}</div><div class="rs-lbl">Bilder</div></div>
+      <div><div class="rs-num">${textEntries.length}</div><div class="rs-lbl">Gedanken</div></div>
     </div>`;
-  return div;
+  body.appendChild(div);
+
+  if(heroText && heroText !== heroPhoto){
+    const q = document.createElement('div'); q.className='card recap-quote';
+    q.innerHTML = `<div class="rq-marks">"</div><div class="rq-text">${esc(heroText.text)}</div>`;
+    body.appendChild(q);
+  }
 }
 
 // ============ COUNTDOWN ============
@@ -703,51 +819,48 @@ function updateCountdown(){
 function renderDiary(){
   const list = document.getElementById('diary-list');
   if(entries.length===0){
-    list.innerHTML = `<div class="empty"><div class="empty-icon">📖</div>Noch keine Einträge.<br><span style="font-size:13px;opacity:.7">Tipp oben, um euren ersten Moment festzuhalten.</span></div>`;
+    list.innerHTML = `<div class="empty">
+      <div class="empty-icon">📖</div>
+      <strong>Hier kommt euer erster Moment rein.</strong>
+      <span>Foto, ein Satz, ein Ort — was bleiben soll.</span>
+      <button class="empty-cta" data-act="first-entry">Jetzt festhalten</button>
+    </div>`;
+    list.querySelector('[data-act="first-entry"]')?.addEventListener('click',()=>openEntrySheet());
     return;
   }
   const sorted = entries.slice().sort((a,b)=>b.ts-a.ts);
   let html = '';
   for(const e of sorted){
     const ch = e.challengeId ? challenges.find(c=>c.id===e.challengeId) : null;
-    html += `<div class="entry" data-id="${e.id}">
+    const di = tripDayIdx(e.ts);
+    html += `<div class="entry" data-id="${e.id}" data-di="${di}">
+      <div class="entry-sticker">${fmtEntryMeta(e.ts)}</div>
       ${e.photo?`<div class="entry-img"><img src="${e.photo}" alt="" data-zoom="${e.id}"></div>`:''}
-      <div class="entry-body">
-        <div class="entry-meta">
-          <div class="entry-time">${fmtEntryMeta(e.ts)}</div>
-          <div class="entry-actions">
-            <button class="entry-action" data-edit="${e.id}" aria-label="Bearbeiten">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-            </button>
-            <button class="entry-action danger" data-del="${e.id}" aria-label="Löschen">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 01-2 2H9a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
-            </button>
-          </div>
-        </div>
-        ${ch?`<div class="entry-badge">📸 ${esc(ch.text)}</div>`:''}
-        ${e.text?`<div class="entry-text">${esc(e.text)}</div>`:''}
-        ${e.loc?`<a class="entry-loc" href="${mapsLink(e.loc)}" target="_blank" rel="noopener">📍 ${esc(e.loc)}</a>`:''}
+      <div class="entry-actions">
+        <button class="entry-action" data-edit="${e.id}" aria-label="Bearbeiten">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </button>
+        <button class="entry-action danger" data-del="${e.id}" aria-label="Löschen">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 01-2 2H9a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+        </button>
       </div>
+      ${ch?`<div class="entry-badge" style="margin-left:4px">📸 ${esc(ch.text)}</div>`:''}
+      ${e.text?`<div class="entry-text">${esc(e.text)}</div>`:''}
+      ${e.loc?`<a class="entry-loc" href="${mapsLink(e.loc)}" target="_blank" rel="noopener">📍 ${esc(e.loc)}</a>`:''}
     </div>`;
   }
   list.innerHTML = html;
-  list.querySelectorAll('[data-zoom]').forEach(img=>{
-    img.addEventListener('click',()=>openPhoto(img.dataset.zoom));
-  });
-  list.querySelectorAll('[data-edit]').forEach(b=>{
-    b.addEventListener('click',()=>openEntrySheet(b.dataset.edit));
-  });
-  list.querySelectorAll('[data-del]').forEach(b=>{
-    b.addEventListener('click',()=>deleteEntry(b.dataset.del));
-  });
+  list.querySelectorAll('[data-zoom]').forEach(img=>img.addEventListener('click',()=>openPhoto(img.dataset.zoom)));
+  list.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>openEntrySheet(b.dataset.edit)));
+  list.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>deleteEntry(b.dataset.del)));
 }
 
 function deleteEntry(id){
   if(!confirm('Eintrag löschen?')) return;
-  // unlink challenge if linked
   const ch = challenges.find(c=>c.entryId===id);
   if(ch){ ch.done=false; ch.entryId=null; }
   entries = entries.filter(x=>x.id!==id);
+  hap(15);
   persist();
   renderAll();
 }
@@ -770,11 +883,8 @@ function renderChallenges(){
       const id = it.dataset.id;
       const c = challenges.find(x=>x.id===id);
       if(!c) return;
-      if(c.done && c.entryId){
-        openEntrySheet(c.entryId);
-      } else {
-        openEntrySheetForChallenge(c);
-      }
+      if(c.done && c.entryId){ openEntrySheet(c.entryId); }
+      else { openEntrySheetForChallenge(c); }
     });
   });
   list.querySelectorAll('[data-del]').forEach(b=>{
@@ -785,7 +895,6 @@ function renderChallenges(){
       if(!c) return;
       if(c.done && c.entryId){
         if(!confirm('Diese Challenge entfernen? Der Tagebuch-Eintrag bleibt erhalten.')) return;
-        // unlink entry from challenge but keep entry
         const ent = entries.find(x=>x.id===c.entryId);
         if(ent) ent.challengeId = null;
       } else {
@@ -838,6 +947,7 @@ function openEntrySheet(id){
   editingEntryId = id || null;
   pendingChallengeId = null;
   pendingPhoto = null;
+  pendingPhotoFile = null;
   const isEdit = !!id;
   document.getElementById('en-h').textContent = isEdit ? 'Eintrag bearbeiten' : 'Neuer Eintrag';
   document.getElementById('en-del-row').style.display = isEdit?'flex':'none';
@@ -863,6 +973,7 @@ function openEntrySheetForChallenge(ch){
   editingEntryId = null;
   pendingChallengeId = ch.id;
   pendingPhoto = null;
+  pendingPhotoFile = null;
   document.getElementById('en-h').textContent = 'Challenge festhalten';
   document.getElementById('en-del-row').style.display = 'none';
   document.getElementById('en-text').value = '';
@@ -918,6 +1029,7 @@ document.getElementById('en-save').addEventListener('click',()=>{
       if(c){ c.done = true; c.entryId = newEntry.id; }
     }
     entries.push(newEntry);
+    hap(30);
   }
   persist(); renderAll();
   document.getElementById('entry-sheet').classList.remove('open');
@@ -985,11 +1097,8 @@ document.getElementById('letter-close').addEventListener('click',()=>document.ge
 function isStandalone(){ return window.navigator.standalone===true || window.matchMedia('(display-mode: standalone)').matches }
 function refreshInstallHint(){
   const el = document.getElementById('install-hint');
-  if(!isStandalone() && !flags.installDismissed){
-    el.style.display='flex';
-  } else {
-    el.style.display='none';
-  }
+  if(!isStandalone() && !flags.installDismissed){ el.style.display='flex'; }
+  else { el.style.display='none'; }
 }
 document.getElementById('install-hint').addEventListener('click',(e)=>{
   if(e.target.id==='install-hint-x') return;
@@ -1002,25 +1111,199 @@ document.getElementById('install-hint-x').addEventListener('click',e=>{
   refreshInstallHint();
 });
 
-// ============ INIT ============
-function renderAll(){
-  renderStart();
-  renderDiary();
-  renderChallenges();
-  refreshInstallHint();
+// ============ PDF EXPORT ============
+document.getElementById('export-btn').addEventListener('click',exportPDF);
+
+function loadScript(src){
+  return new Promise((res,rej)=>{
+    const s = document.createElement('script');
+    s.src = src; s.onload = res; s.onerror = rej;
+    document.head.appendChild(s);
+  });
 }
-function init(){
-  if(!Store.available){
-    const b = document.getElementById('banner');
-    b.style.display='block';
-    b.innerHTML = 'Vorschau-Modus: Speicherung läuft nur für diese Session. Beim Deploy werden Einträge dauerhaft gespeichert.';
+async function loadPDFLibs(){
+  if(window.jspdf && window.html2canvas) return;
+  await Promise.all([
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'),
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js')
+  ]);
+}
+function updatePDFStatus(t,p){
+  document.getElementById('pdf-loader-text').textContent = t;
+  document.getElementById('pdf-bar-fill').style.width = (p*100)+'%';
+}
+function waitForImages(el){
+  const imgs = el.querySelectorAll('img');
+  return Promise.all(Array.from(imgs).map(img=>{
+    if(img.complete && img.naturalWidth>0) return Promise.resolve();
+    return new Promise(res=>{ img.onload=res; img.onerror=res; setTimeout(res,3000); });
+  }));
+}
+
+async function exportPDF(){
+  const loader = document.getElementById('pdf-loader');
+  loader.classList.add('open');
+  updatePDFStatus('Lade Bibliotheken…',0.05);
+  try{
+    await loadPDFLibs();
+    updatePDFStatus('Sortiere Erinnerungen…',0.12);
+    const pages = buildPageConfigs();
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});
+    const A4_W = 210, A4_H = 297;
+    for(let i=0;i<pages.length;i++){
+      const cfg = pages[i];
+      updatePDFStatus(`Seite ${i+1} von ${pages.length}…`, 0.15+(i/pages.length)*0.8);
+      const el = buildPageElement(cfg);
+      document.body.appendChild(el);
+      await waitForImages(el);
+      const canvas = await html2canvas(el,{scale:1.4,backgroundColor:null,useCORS:true,logging:false,width:794,height:1123});
+      document.body.removeChild(el);
+      const img = canvas.toDataURL('image/jpeg',0.85);
+      if(i>0) pdf.addPage();
+      pdf.addImage(img,'JPEG',0,0,A4_W,A4_H);
+    }
+    updatePDFStatus('Speichere…',0.98);
+    pdf.save('Mallorca-Fotobuch.pdf');
+    hap(40);
+    setTimeout(()=>loader.classList.remove('open'),600);
+  }catch(err){
+    console.error(err);
+    loader.classList.remove('open');
+    alert('Es gab einen Fehler beim Erstellen. Versuch es nochmal.');
   }
-  showSplash();
-  renderAll();
-  setInterval(()=>{ updateCountdown(); }, 1000);
-  setInterval(()=>{ if(phase()!=='pre') renderStart(); }, 60000);
 }
-init();
-</script>
-</body>
-</html>
+
+function buildPageConfigs(){
+  const cfgs = [];
+  cfgs.push({type:'cover'});
+  cfgs.push({type:'letter'});
+  const days = eachDay();
+  const sorted = entries.slice().sort((a,b)=>a.ts-b.ts);
+  days.forEach((day,idx)=>{
+    const key = isoDay(day);
+    const de = sorted.filter(e=>isoDay(new Date(e.ts))===key);
+    if(de.length===0) return;
+    cfgs.push({type:'day-intro',day,dayIdx:idx,total:days.length});
+    const packed = packEntries(de);
+    packed.forEach(p=>cfgs.push(p));
+  });
+  cfgs.push({type:'end',stats:{days:days.length,photos:entries.filter(e=>e.photo).length,notes:entries.filter(e=>e.text).length}});
+  return cfgs;
+}
+
+function packEntries(ents){
+  const pages = [];
+  let i = 0, layoutCounter = 0;
+  while(i<ents.length){
+    const rem = ents.length-i;
+    if(rem>=4 && ents.slice(i,i+4).every(e=>e.photo)){
+      pages.push({type:'grid',entries:ents.slice(i,i+4)}); i+=4; layoutCounter++; continue;
+    }
+    if(rem>=2 && ents[i].photo && ents[i+1].photo){
+      pages.push({type: layoutCounter%2===0?'two-vertical':'two-horizontal', entries:ents.slice(i,i+2)});
+      i+=2; layoutCounter++; continue;
+    }
+    const e = ents[i];
+    if(e.photo){
+      pages.push({type:e.text && e.text.length>50?'photo-text':'single-photo', entries:[e]});
+    } else if(e.text || e.loc){
+      pages.push({type:'quote', entries:[e]});
+    }
+    i++; layoutCounter++;
+  }
+  return pages;
+}
+
+function buildPageElement(cfg){
+  const el = document.createElement('div');
+  el.style.cssText = `position:fixed;top:0;left:-99999px;width:794px;height:1123px;background:#FBF4ED;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;color:#2A1A2E;overflow:hidden;box-sizing:border-box`;
+  switch(cfg.type){
+    case 'cover': el.innerHTML = pgCover(); break;
+    case 'letter': el.innerHTML = pgLetter(); break;
+    case 'day-intro': el.innerHTML = pgDayIntro(cfg); break;
+    case 'single-photo': el.innerHTML = pgSinglePhoto(cfg.entries[0]); break;
+    case 'photo-text': el.innerHTML = pgPhotoText(cfg.entries[0]); break;
+    case 'two-vertical': el.innerHTML = pgTwoVertical(cfg.entries); break;
+    case 'two-horizontal': el.innerHTML = pgTwoHorizontal(cfg.entries); break;
+    case 'grid': el.innerHTML = pgGrid(cfg.entries); break;
+    case 'quote': el.innerHTML = pgQuote(cfg.entries[0]); break;
+    case 'end': el.innerHTML = pgEnd(cfg.stats); break;
+  }
+  return el;
+}
+
+const SERIF = "'Iowan Old Style','Palatino Linotype',Georgia,serif";
+
+function pgCover(){
+  return `
+    <div style="position:absolute;inset:0;background:linear-gradient(160deg,#F4B58A 0%,#E89372 28%,#C97B63 55%,#7E4858 80%,#3E2238 100%)"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(circle at 85% 18%,rgba(255,220,180,.55),transparent 45%),radial-gradient(circle at 12% 92%,rgba(40,15,40,.5),transparent 55%)"></div>
+    <div style="position:absolute;top:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,#FFD9B0 0%,#FFA76A 60%,transparent 70%);opacity:.85"></div>
+    <div style="position:absolute;bottom:160px;left:80px;right:80px;color:#fff">
+      <div style="font-size:14px;letter-spacing:6px;text-transform:uppercase;opacity:.9;margin-bottom:40px;font-weight:600">Dein Fotobuch</div>
+      <div style="font-family:${SERIF};font-style:italic;font-size:140px;line-height:.95;margin-bottom:48px;letter-spacing:-2px">Mallorca</div>
+      <div style="font-size:18px;opacity:.92;letter-spacing:1px">04. — 08. Juni 2026</div>
+    </div>`;
+}
+function pgLetter(){
+  return `
+    <div style="position:absolute;inset:0;background:linear-gradient(170deg,#FBF4ED 0%,#F4D2BE 100%)"></div>
+    <div style="position:relative;padding:160px 100px;height:100%;display:flex;flex-direction:column;justify-content:center;box-sizing:border-box">
+      <div style="text-align:center;font-size:12px;letter-spacing:4px;text-transform:uppercase;color:#C97B63;margin-bottom:28px;font-weight:600">Für dich</div>
+      <div style="text-align:center;font-family:${SERIF};font-style:italic;font-size:48px;line-height:1.1;color:#2A1A2E;margin-bottom:48px">Bevor wir starten…</div>
+      <div style="font-family:${SERIF};font-size:21px;line-height:1.75;text-align:left;white-space:pre-wrap;color:#2A1A2E;max-width:540px;margin:0 auto">${esc(LETTER_TEXT)}</div>
+    </div>`;
+}
+function pgDayIntro(c){
+  const d = c.day; const num = String(c.dayIdx+1).padStart(2,'0'); const tot = String(c.total).padStart(2,'0');
+  return `
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;width:80%">
+      <div style="font-size:13px;letter-spacing:6px;text-transform:uppercase;color:#C97B63;margin-bottom:38px;font-weight:600">Tag ${num} von ${tot}</div>
+      <div style="font-family:${SERIF};font-style:italic;font-size:180px;color:#2A1A2E;line-height:.9;margin-bottom:24px">${d.getDate()}.${String(d.getMonth()+1).padStart(2,'0')}</div>
+      <div style="font-size:22px;color:#7A6973;font-family:${SERIF};letter-spacing:1px">${DAYS_LONG[d.getDay()]}</div>
+    </div>
+    <div style="position:absolute;bottom:90px;left:120px;right:120px;height:1px;background:linear-gradient(90deg,transparent,#C97B63,transparent);opacity:.5"></div>`;
+}
+function pgSinglePhoto(e){
+  return `
+    <div style="position:absolute;inset:0;background:#fff"></div>
+    <div style="position:absolute;top:50px;left:50px;right:50px;bottom:230px;background:#EDE3DA;border-radius:3px;overflow:hidden;box-shadow:0 10px 32px rgba(0,0,0,.14)">
+      <img src="${e.photo}" style="width:100%;height:100%;object-fit:cover;display:block" crossorigin="anonymous">
+    </div>
+    <div style="position:absolute;bottom:80px;left:80px;right:80px;text-align:center">
+      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#C97B63;margin-bottom:14px;font-weight:600">${fmtEntryMeta(e.ts)}</div>
+      ${e.text?`<div style="font-family:${SERIF};font-style:italic;font-size:22px;color:#2A1A2E;line-height:1.45">${esc(e.text)}</div>`:''}
+      ${e.loc?`<div style="font-size:14px;color:#7A6973;margin-top:10px">📍 ${esc(e.loc)}</div>`:''}
+    </div>`;
+}
+function pgPhotoText(e){
+  return `
+    <div style="position:absolute;inset:0;background:#fff"></div>
+    <div style="position:absolute;top:50px;left:50px;right:50px;height:580px;background:#EDE3DA;border-radius:3px;overflow:hidden;box-shadow:0 10px 32px rgba(0,0,0,.14)">
+      <img src="${e.photo}" style="width:100%;height:100%;object-fit:cover;display:block" crossorigin="anonymous">
+    </div>
+    <div style="position:absolute;top:700px;left:100px;right:100px;bottom:80px">
+      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#C97B63;margin-bottom:18px;font-weight:600">${fmtEntryMeta(e.ts)}</div>
+      <div style="font-family:${SERIF};font-size:22px;line-height:1.55;color:#2A1A2E">${esc(e.text)}</div>
+      ${e.loc?`<div style="font-size:14px;color:#7A6973;margin-top:18px">📍 ${esc(e.loc)}</div>`:''}
+    </div>`;
+}
+function pgTwoVertical(ens){
+  const [e1,e2] = ens;
+  return `
+    <div style="position:absolute;inset:0;background:#fff"></div>
+    <div style="position:absolute;top:50px;left:60px;right:60px;height:460px;background:#EDE3DA;border-radius:3px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.1)">
+      <img src="${e1.photo}" style="width:100%;height:100%;object-fit:cover" crossorigin="anonymous">
+    </div>
+    <div style="position:absolute;top:524px;left:60px;right:60px;text-align:center;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#C97B63;font-weight:600">${fmtEntryMeta(e1.ts)}${e1.text?' · '+esc(e1.text.substring(0,80)):''}</div>
+    <div style="position:absolute;top:570px;left:60px;right:60px;height:460px;background:#EDE3DA;border-radius:3px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.1)">
+      <img src="${e2.photo}" style="width:100%;height:100%;object-fit:cover" crossorigin="anonymous">
+    </div>
+    <div style="position:absolute;bottom:30px;left:60px;right:60px;text-align:center;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#C97B63;font-weight:600">${fmtEntryMeta(e2.ts)}${e2.text?' · '+esc(e2.text.substring(0,80)):''}</div>`;
+}
+function pgTwoHorizontal(ens){
+  const [e1,e2] = ens;
+  return `
+    <div style="position:absolute;inset:0;background:#fff"></div>
+    <div style="position:absolute;top:140px;left:50px;width:340px;height:620px;background:#EDE3DA;border-radius:3px;overflow:hid
