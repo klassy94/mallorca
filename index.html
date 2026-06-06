@@ -754,8 +754,27 @@ function updatePreview(){
   sp.style.display=canShare?'flex':'none';
 }
 document.getElementById('en-prev-x').addEventListener('click',()=>{pendingPhoto=null;pendingPhotoFile=null;updatePreview();});
+async function loadHeic2any(){
+  if(window.heic2any)return;
+  try{await loadScript('https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.4/heic2any.min.js');}
+  catch(e){await loadScript('https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js');}
+}
 async function handleEntryFile(f){
   if(!f)return;
+  const isHeic=/\.(heic|heif)$/i.test(f.name)||/heic|heif/i.test(f.type||'');
+  if(isHeic){
+    try{
+      await loadHeic2any();
+      if(!window.heic2any)throw new Error('no converter');
+      const blob=await window.heic2any({blob:f,toType:'image/jpeg',quality:0.85});
+      const out=Array.isArray(blob)?blob[0]:blob;
+      f=new File([out],f.name.replace(/\.(heic|heif)$/i,'.jpg'),{type:'image/jpeg'});
+    }catch(e){
+      console.error('HEIC:',e);
+      alert('Dieses Foto ist im iPhone-Format (HEIC) und konnte nicht umgewandelt werden.\n\nTipp: iPhone → Einstellungen → Kamera → Formate → „Maximale Kompatibilität".\n\nNeue Fotos werden dann als JPEG gespeichert.');
+      return;
+    }
+  }
   pendingPhotoFile=f;
   try{pendingPhoto=await compress(f);updatePreview();}
   catch(e){console.error(e);alert('Foto konnte nicht geladen werden.');}
