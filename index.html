@@ -410,6 +410,7 @@ input,textarea,select{font-family:inherit}
     </div>
     <div class="field"><label>Was bleibt?</label><textarea id="en-text" placeholder="Gedanke, Moment, Lacher…"></textarea></div>
     <div class="field"><label>Ort</label><input id="en-loc" type="text" placeholder="z.B. Mad Donkey Cafe"></div>
+    <div class="field"><label>Wann</label><input id="en-ts" type="datetime-local"></div>
     <div class="btn-row">
       <button class="btn-cancel" data-close="entry-sheet" type="button">Abbrechen</button>
       <button class="btn-ok" id="en-save" type="button">Festhalten</button>
@@ -710,6 +711,10 @@ function switchTab(name){
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.p)));
 
 // ENTRY SHEET
+function fmtDtLocal(ts){
+  const d=new Date(ts);const p=n=>String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+}
 function openEntrySheet(id){
   editingEntryId=id||null;
   pendingChallengeId=null;pendingPhoto=null;pendingPhotoFile=null;
@@ -721,13 +726,18 @@ function openEntrySheet(id){
     const e=entries.find(x=>x.id===id);
     document.getElementById('en-text').value=e?.text||'';
     document.getElementById('en-loc').value=e?.loc||'';
+    document.getElementById('en-ts').value=fmtDtLocal(e?.ts||Date.now());
     pendingPhoto=e?.photo||null;
     if(e?.challengeId){
       const c=challenges.find(x=>x.id===e.challengeId);
       if(c)showChBanner(c.text);
       pendingChallengeId=e.challengeId;
     }
-  }else{document.getElementById('en-text').value='';document.getElementById('en-loc').value='';}
+  }else{
+    document.getElementById('en-text').value='';
+    document.getElementById('en-loc').value='';
+    document.getElementById('en-ts').value=fmtDtLocal(Date.now());
+  }
   updatePreview();
   document.getElementById('entry-sheet').classList.add('open');
 }
@@ -737,6 +747,7 @@ function openEntrySheetForChallenge(ch){
   document.getElementById('en-del-row').style.display='none';
   document.getElementById('en-text').value='';
   document.getElementById('en-loc').value='';
+  document.getElementById('en-ts').value=fmtDtLocal(Date.now());
   showChBanner(ch.text);
   updatePreview();
   document.getElementById('entry-sheet').classList.add('open');
@@ -759,25 +770,26 @@ async function loadHeic2any(){
   try{await loadScript('https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.4/heic2any.min.js');}
   catch(e){await loadScript('https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js');}
 }
+async function isHEIC(file){
+  if(/\.(heic|heif)$/i.test(file.name)||/heic|heif/i.test(file.type||''))return true;
+  try{
+    const buf=await file.slice(0,12).arrayBuffer();
+    const b=new Uint8Array(buf);
+    if(b[4]===0x66&&b[5]===0x74&&b[6]===0x79&&b[7]===0x70){
+      const brand=String.fromCharCode(b[8],b[9],b[10],b[11]);
+      return ['heic','heix','heim','heis','hevc','hevx','hevm','hevs','mif1','msf1'].includes(brand);
+    }
+  }catch(e){}
+  return false;
+}
 async function handleEntryFile(f){
   if(!f)return;
-  const isHeic=/\.(heic|heif)$/i.test(f.name)||/heic|heif/i.test(f.type||'');
-  if(isHeic){
-    try{
-      await loadHeic2any();
-      if(!window.heic2any)throw new Error('no converter');
-      const blob=await window.heic2any({blob:f,toType:'image/jpeg',quality:0.85});
-      const out=Array.isArray(blob)?blob[0]:blob;
-      f=new File([out],f.name.replace(/\.(heic|heif)$/i,'.jpg'),{type:'image/jpeg'});
-    }catch(e){
-      console.error('HEIC:',e);
-      alert('Dieses Foto ist im iPhone-Format (HEIC) und konnte nicht umgewandelt werden.\n\nTipp: iPhone → Einstellungen → Kamera → Formate → „Maximale Kompatibilität".\n\nNeue Fotos werden dann als JPEG gespeichert.');
-      return;
-    }
-  }
   pendingPhotoFile=f;
   try{pendingPhoto=await compress(f);updatePreview();}
-  catch(e){console.error(e);alert('Foto konnte nicht geladen werden.');}
+  catch(e){
+    console.error('Foto-Fehler:',e);
+    alert('Dieses Foto konnte nicht geladen werden. Versuch ein anderes Format oder ein anderes Bild.');
+  }
 }
 document.getElementById('en-cam').addEventListener('change',e=>{handleEntryFile(e.target.files[0]);e.target.value='';});
 document.getElementById('en-gal').addEventListener('change',e=>{handleEntryFile(e.target.files[0]);e.target.value='';});
@@ -789,12 +801,14 @@ document.getElementById('en-save-phone').addEventListener('click',async()=>{
 document.getElementById('en-save').addEventListener('click',()=>{
   const text=document.getElementById('en-text').value.trim();
   const loc=document.getElementById('en-loc').value.trim();
+  const tsStr=document.getElementById('en-ts').value;
+  const ts=tsStr?new Date(tsStr).getTime():Date.now();
   if(!text&&!pendingPhoto&&!loc&&!pendingChallengeId){alert('Schreib was, mach ein Foto oder gib einen Ort an.');return;}
   if(editingEntryId){
     const e=entries.find(x=>x.id===editingEntryId);
-    if(e){e.text=text;e.loc=loc;e.photo=pendingPhoto;}
+    if(e){e.text=text;e.loc=loc;e.photo=pendingPhoto;e.ts=ts;}
   }else{
-    const newEntry={id:uid(),ts:Date.now(),text,loc,photo:pendingPhoto};
+    const newEntry={id:uid(),ts,text,loc,photo:pendingPhoto};
     if(pendingChallengeId){
       newEntry.challengeId=pendingChallengeId;
       const c=challenges.find(x=>x.id===pendingChallengeId);
@@ -821,22 +835,45 @@ document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',
 document.querySelectorAll('.sheet-bg').forEach(s=>s.addEventListener('click',e=>{if(e.target===s)s.classList.remove('open');}));
 
 // COMPRESS
-function compress(file){
+function loadImgFromBlob(blob){
   return new Promise((res,rej)=>{
     const r=new FileReader();
     r.onload=()=>{
       const img=new Image();
-      img.onload=()=>{
-        const max=1100;let{width:w,height:h}=img;
-        if(w>max||h>max){if(w>h){h=Math.round(h*max/w);w=max;}else{w=Math.round(w*max/h);h=max;}}
-        const c=document.createElement('canvas');c.width=w;c.height=h;
-        c.getContext('2d').drawImage(img,0,0,w,h);
-        res(c.toDataURL('image/jpeg',0.72));
-      };
-      img.onerror=rej;img.src=r.result;
+      img.onload=()=>res(img);
+      img.onerror=()=>rej(new Error('Image decode failed'));
+      img.src=r.result;
     };
-    r.onerror=rej;r.readAsDataURL(file);
+    r.onerror=rej;r.readAsDataURL(blob);
   });
+}
+async function compress(file){
+  let bitmap=null;
+  // 1. Try native decode (Safari 17+ handles HEIC natively)
+  try{bitmap=await createImageBitmap(file);}catch(e){}
+  // 2. If failed and file is HEIC, convert via heic2any
+  if(!bitmap && await isHEIC(file)){
+    try{
+      await loadHeic2any();
+      if(window.heic2any){
+        const conv=await window.heic2any({blob:file,toType:'image/jpeg',quality:0.9});
+        const blob=Array.isArray(conv)?conv[0]:conv;
+        try{bitmap=await createImageBitmap(blob);}catch(e){}
+        if(!bitmap){bitmap=await loadImgFromBlob(blob);}
+      }
+    }catch(e){console.error('HEIC-Konvertierung fehlgeschlagen:',e);}
+  }
+  // 3. Final fallback: standard Image element
+  if(!bitmap){bitmap=await loadImgFromBlob(file);}
+  // Compress
+  const max=1100;
+  let w=bitmap.width||bitmap.naturalWidth;
+  let h=bitmap.height||bitmap.naturalHeight;
+  if(w>max||h>max){if(w>h){h=Math.round(h*max/w);w=max;}else{w=Math.round(w*max/h);h=max;}}
+  const c=document.createElement('canvas');c.width=w;c.height=h;
+  c.getContext('2d').drawImage(bitmap,0,0,w,h);
+  if(bitmap.close)bitmap.close();
+  return c.toDataURL('image/jpeg',0.72);
 }
 function openPhoto(id){
   const e=entries.find(x=>x.id===id);
